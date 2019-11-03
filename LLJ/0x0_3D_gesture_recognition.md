@@ -26,10 +26,17 @@
 <P align=center>
  <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic2.svg" width="580">
 </p>
+<br/>
 
 上下左右4对电极的电容计数值在没有任何物体接近的状态下是一个稳定的计数值（参考值）。当手接近或离开面板时，电极的计数值会产生变化。
 
 利用计数值相对于参考值的差异程度可以计算3D坐标位置
+
+<br/>
+<P align=center>
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic3.svg" width="580">
+</p>
+<br/>
 
 ### XYZ三轴坐标计算方法
 
@@ -91,6 +98,9 @@ Y轴坐标的计算过程与X轴坐标同理
 + 提供用于抑制噪声的软件滤波器。
 + 相应软件中判断噪声超出设定阈值马上停止3D坐标计算，直到噪声恢复正常范围再恢复3D坐标计算。
 
+## 参考
+
+周雄健.基于静电电容式触摸检测的3D手势识别技术[J].家电科技,2018(12):58-61.
 
 
 
