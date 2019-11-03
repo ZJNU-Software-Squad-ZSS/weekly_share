@@ -12,7 +12,7 @@
 
 在ESC实例的安全组配置里开放 **<u>8888</u>** 端口（入方向），如果要使用宝塔面板的全部功能， 888、80、443、20、21，这5个端口也要开放 。
 
-![image-20191103112627756](C:\Users\asus\AppData\Roaming\Typora\typora-user-images\image-20191103112627756.png)
+![这是安全组开放示意](https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572765712028&di=3ad84d60c1dde3183cfe0b58eeb3e3bb&imgtype=0&src=http%3A%2F%2Fstatic.oneinstack.com%2Fimages%2Fsecuritygroup%2Fcvm-sg-add.png)
 
 #### 安装宝塔面板
 
@@ -25,21 +25,21 @@
 
 下载成功后会显示complete之类的单词，后面就是宝塔后台的信息了。
 
-![image-20191103113824811](C:\Users\asus\AppData\Roaming\Typora\typora-user-images\image-20191103113824811.png)
+![这是一张下载成功后的截图](https://www.laoyangblog.com/wp-content/uploads/2018/09/20180923232950.png)
 
-记录下灰色部分的三条信息。
+记录下随机生成的三条信息。（图片源于网络，并不是最新版本）
 
-⚠在当前最新版的宝塔（2019.10）中新增了Bt-Panel安全入口这一项，访问后台的登陆地址不再是 ：
+⚠在当前最新版的宝塔（2019.10）中Bt-Panel安全入口这一项有变化，访问后台的登陆地址不再是 ：
 
 http://你的服务器IP:8888 
 
-系统在后面随机加上了六个字符，以提高安全性。
+系统在后面随机加上了八个字符，以提高安全性。
 
 #### 登陆后台，选择环境安装
 
-如果没有登陆地址的后六位字符，网页会有如下显示（早期版本除外）
+如果没有登陆地址的后八位字符，网页会有如下显示（早期版本除外）
 
-![image-20191103114604218](C:\Users\asus\AppData\Roaming\Typora\typora-user-images\image-20191103114604218.png)
+![这是地址错误是网页显示的截图](http://www.mabiji.com/wp-content/uploads/2019/01/btrukou.jpg)
 
 按照提示在终端输入
 
