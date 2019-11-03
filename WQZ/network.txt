@@ -1,0 +1,253 @@
+1. Internet is largest engineered system ever created by mainkind
+2. Hundereds of millions of connected computers, communication link, switches with of billions of users connect with
+    Laptops, smartphones, tablet and many new things such refrigerator, light-bulb, AC and TV all connected to internet.
+3. What is the Internet?  "Nuts and bolt view"
+     Internet is a computer network that interconnects billions of computing devices throughout the world.
+    These devices are divided into
+	a. Traditional Devices: Desktop PC, Linux WorkStation and server(stores and transmit information in the form
+                                                                                                                             Webpages)
+	b.Non-Traditional Devices or "Things": Laptops, SmartPhones, Tablets, TV, car, watches and eyeGlasses
+					Trafic Control System.
+4.  These devices technically called as "Host"  or "End Systems".
+5. End Systems are connected together by network of communication Links such 
+	There are various types of communication Links such as 
+		a. Coaxial cable , Optical Fiber, Radio Spectrum .
+6. Different Communication Link can Transmit data at different rates measured in bits/second
+7.When One end system has data to send to another end system, The Sending end segments the data in smaller packets and 
+	adds header to it. These are sent through the network to the destination end system where they are reassembled into
+	the original  data.
+8. Packet Switches:  takes up the data from its incomming commuication link and forwards it to outgoing communication link.
+   packet switches comes in many flavour but the two most popular is
+	a. Router
+	b. Link-Layer Switches
+9. task of these swicthes is to forward the data to there respective destination
+10. Example: Factory wants to move cargo to warehouse located at thousands of kilometers away.
+		a. At factory the cargo is segmented and loaded into a fleet of trucks.
+		b. Trucks travels independently through the network of highways , roads and intersections
+			to the destination warehouse.
+		c. At the destination cargo is unloaded and grouped with other cargo arriving from same shipment.
+11. 	a. Packets are analogous to trucks
+	b. Communication links are analogous to highway, roads 
+	c. packet switches are analogous to intersections.
+	d. end systems are analogous to buildings.
+
+12. End System access the internet through Internet Service Provider(ISP).
+	a. ISP is a network of packet switches and communication link.
+	b. There are Many different types of ISP Such as
+		1. Residential ISP: Local Cable, Telephone Companies
+		2. Corporate ISP, University ISP.
+		3. ISP that provides wifi access in airports, hotels coffee shops 
+		4. Cellular data ISP: Providing mobile access to our smartphones and other devices.
+13. These ISP are interconnected with each other to connect the end system with each other.
+14. Protocol:   (Language or standards of communication).
+	      "A set of rules that must be followed during conversation"
+15. End System, packet Switches and other parts of internet runs  using some standards that is Protocol
+16. This Protocol Controls the sending and receiving of information within the Internet.
+17. The Transmission Control Protocol [TCP] and Internet Protocol[IP] are two important protocols in the internet.
+18. Protocols must be followed by everyone so a standard has to be created.so everyone can be in the same picture.
+19. Internet Standard are developed by Internet Engineering Task Force(IETF).
+20. The IETF standard documents are called requests for comments(RFCs).
+
+*****************************************************************************************************
+What's the Internet : A Service View?
+
+1. Another Angle: "Internet is an Infrastructure that provide services to applications" 
+2. The Applications that resides on end systems are:
+		a. e-mail
+		b. web-surfing
+		c. SmartPhones and Tablet Application such as;
+			1. Internet messaging
+			2. GPS
+			3. Social Networks
+			4. Video Conferencing
+			5. Multi-Person Games
+			6. Banking Applications
+3. These applications are "distributed applications". What is Distributed Application? program running on various end system
+								and interacting with each other.
+4. Suppose you want to be famous/rich by creating distributed game application where multiple player can play game over
+	the internet.
+5. For smooth exchange of data between multiple player, this distributed application must request Internet Insfrastructure
+	to send and receive data.
+6. Every End system attached to internet provides "Socket Interface", This Socket Interface is reponsible for setting up rules that
+	must be followed by distributed application during exchange of data.
+7. Alice wants to send gift to bob, Alice must use the Postal Service.
+8. Alice must follow the rules setup by "postal service interface" i.e. she must write proper address, name pincode.
+
+****************************************************************************************************
+What is a Protocol?
+1. Human Protocol: You want to ask someone time of the day, you start your conversation with
+		"Hi"  -------------------If response is "Hi" you can go on asking time
+				
+				if response is "Don't bother me"  this shows inability to communicate.
+2. In Human protocol: specific message send, and specific action we take in response to the received reply message plays
+			a key role in Human Protocol
+3. Network protocol: Machines sends, recieve and take actions in response to reply message.
+4. All communication over the internet is governed by protocol .
+5. example of  TCP Connection and requesting for web page.
+
+"A protocol defined the format and the order of messages exchanged between two or more communicating entities" as well as 
+	action taken.
+******************************************************************************************************
+Network Edge
+
+1. end systems are called end system because they sit at the edge of the internet.
+2. end systems are also called as hosts because they host application programs such as web browser and many other app.
+3. Let's Discuss about Internet of Things (IoT).
+4. Hosts= EndSystems
+5. Hosts are further divided into Clients and Servers.
+6. Clients are Desktop PC, SmartPhones
+7. Servers are more powerful machines and resides in large data center.
+8. Google has 50-100 data centers, including about 15 large data center each with more 100,000 servers.
+****************************************************************************************************
+
+Access Networks
+" The Network that physically connects an end system to the first router is termed as Acess network."
+
+Home Access: DSL (Digital Subscriber Line)
+1. The two most famous broadband residential access are digital subscriber line(DSL) and Cable.
+2. When DSL is used, Customer's telephone company is its ISP.
+3. Each customer's Modem uses the existing telephone line to exchange data with a 
+	Digital Subscriber Line access multiplexer(DSLAM	)
+4. The Analog Signals from many such houses are translated back into digital.
+5. The residential telephone carries both data and telephone signals simultaneously.
+6. Different frequencies are used for voice and data transmission as given below:
+		1. 0-4kHz   	-> Ordinary two way telephone channel
+		2. 4-50kHz 	-> Upstream Channel
+		3. 50-1MHz	-> Downstream Channel
+7. This division of Frequency is FDM(Frequency Division Multiplexing).
+8. The DSLAM seperates the data and phone signals and sends the data into the internet.
+
+Cable
+1. Fiber-Optics connects the cable head end to neighborhood-level Junction(Building or society).
+2. from Neighborhood-level junction, coaxial cable is used to reach indiviual houses .
+3. Both Fiber and coaxial cable is used it is also referred as Hybrid Fiber Coax(HFC).
+4. Cable Internet access require special modem called cable modems,
+5. This modem is typically an external device connects to home pc through Ethernet Port.
+6. CMTS (Cable Model Termination System) acts exactly line DSLAM, it converts Analog Signal to Digital Signal.
+7. Cable Internet access is a Shared broadcast medium that is;
+		1. packet sent by the head end travels downstream on every link to every home 
+		2. For this reason the speed will vary.
+8. UpComing technology that provides even higher speed is fiber to the Home (FTTH).
+9. FTTH provides an optical fiber path from the CO directly to the home.
+
+Enterprise/Home Access : Ethernet and Wifi
+
+1. On Corporate ,University and Home, A Local Area Network (LAN) is used to connect and end System to the edge router.
+2. Ethernet users use twisted-pair copper wire to connect to an Ethernet switch.(Ethernet Switch Will be Discussed later).
+
+Wireless network----refer to ppt.
+*******************************************************************************************************
+Physical Media
+
+1. Physical Media are of two types
+	a. Guided Media		: Waves guided along solid medium such as 
+					-Fiber Optic cable
+					-Twisted-Pair copper wire
+					-Coaxial Cable 
+	b. Unguided Media		: Waves travel in atmosphere such as wireless LAN .
+
+2. Example of physical Media include:
+		1. Twisted-Pair Copper wire
+		2. Coaxial Cable
+		3. Fibre-Optic cable
+		4. Radio Spectrum  : Terrestrial or Satellite
+3. Life of bit starts from one end system and travels along various swicthes connected with various different kinds of 
+	physical medium.
+
+4. Labor cost for the installation is more compared to actual cost of physical link.
+
+
+1. Twisted-Pair Copper Wire
+	- Least expensive and most commonly used .
+	- for over 100's of year used by telephone networks
+	- it consists of two insulated copper wires , each about 1mm thick.
+	- Data rates for LAN using twisted pair today is range from 10Mbps to 10 Gbps.
+
+2. Coaxial Cable
+	-consists of two copper conductors 
+	- it's common in cable television systems.
+	-it can be use as guided shared medium
+
+3. Fiber Optics
+	-it conducts pulses of light
+	- each pulse representing a bit
+	-it can support 10's or 100's of gigabits per second
+	- due to high cost it's not deployed in a LAN and into home.
+
+4. Radio:
+	A: Terrestrial Radio Channels
+		-carry signal in the electromagnetic spectrum
+		-require no physical wire to be installed can penetrate walls
+		-it depends on propogation environment and the distance signal has to travel
+		-Terrestrial radio channel is classified into three groups
+			1. very short distance: 1 or 2 meters.
+			2. Local Areas:          10 to 100 meters
+			3. Wide Area :           tens of Kilometers.
+
+	B: Satellite Radio Channels
+		-Communication Satellite links earth-based transmitter/receivers.
+		-two types of satellites are used in Communication
+			1. geostationary satellites	: remains at one spot
+			2. low-earth orbiting satellites	: does not remains at one spot , it rotates just like moon
+
+*******************************************************************************************************
+The Network Core -> the mesh of packet switches and links that interconnects the Internet's end systems
+
+Packet Switching
+	-The message can be very big such as Image, video or audio
+	- To send such data over network, the sources breaks it in smaller chunks know as packets
+	-Packets travels through communication links and packet switches.
+	-Source end system is sending a packet of L bits over a link with transmission rate of R bits/sec, then
+	- the time to transmit the packet is L/R seconds.
+
+Store and Forward Transmission
+	-it means that the packet switch must receive the entire packet before it can begin to transmit the first bit.
+	-Now let抯 calculate the amount of time that elapses from when the source begins
+	-to send the first packet until the destination has received all three packets. As before,
+	-at time L/R, the router begins to forward the first packet. But also at time L/R the
+	-source will begin to send the second packet, since it has just finished sending the
+	-entire first packet. Thus, at time 2L/R, the destination has received the first packet
+	-and the router has received the second packet. Similarly, at time 3L/R, the destina-
+	-tion has received the first two packets and the router has received the third packet.
+	-Finally, at time 4L/R the destination has received all three packets!
+
+Queuing Delay and Packet Loss
+	-The packet switch has an output buffer know as output queue.
+	- output buffer stores packets that the router is about send into that link.
+	-if an arriving packet needs to be transmitted onto a link but finds the link busy.
+	- The arriving packet must wait in the output buffer queuing delays.
+	-This delay depends upon congestion in the network
+	- let's take the example on ppt
+
+Forwarding Table and Routing Protocol
+	- How does router forwards packets arriving at input link?
+	-Every end system has an address called IP address
+	- The Source end system includes destination end system IP address in the header file.
+	- Each router has a forwarding table using which it forwards the packets
+	-routing protocol determines shortest path from each router to each destination.
+
+
+Circuit Switching
+	-The resources needed for communication between end system is reserved , packet switching not reserved.
+	-Kind of private path to send and receive message over the network
+	-The sender can transfer the data to the receiver at the guaranteed constant rate.
+	
+
+Multiplexing in Circuit Switched Network
+	- Frequency Division Multiplexing
+		-Frequency spectrum is divided 
+		- The Link Dedicates a frequency band to each connection for the duration of connection
+		-FM radio station also uses FDM to share frequency spectrum between 88Mhz and 108Mhz
+		
+
+	-Time Division Multiplexing
+		- The entire frequency band is used by one user at the given instance of time
+
+
+Packet Switching vs Circuit Switching
+		- packet switching is not suitable for realtime  services such telephone, video conference
+		-it offers better sharing of transmission capacity
+		-it is simpler, more effecient and less costly
+		
+Internet Structure : network of Networks
+	-
