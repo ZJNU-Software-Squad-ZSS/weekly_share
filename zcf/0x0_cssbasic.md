@@ -7,7 +7,7 @@ External styles--between <head> and </head>
 <link href=“*.css” rel=“stylesheet” type=“text/css”>
 <style> @import “*.css”; </style>
 
-CSS Grammer
+ CSS Grammer
 A Style rule:
 Selector {
 Attribute1: value1;
@@ -17,12 +17,12 @@ Attribute3: value3;
 }
 
 
-Three elementary types:
+ Three elementary types:
 Tag:   body{…}     div{…}   p{…}   h2{…}
 Class:  .sel{…}
 Id: #div{…}
 
-body {
+ body {
 font-size: 10pt;
 font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 color: black;
