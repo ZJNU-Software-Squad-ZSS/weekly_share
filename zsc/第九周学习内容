@@ -1,0 +1,138 @@
+
+
+#### 第九周学习内容
+
+##### 二分查找法
+
+线性查找法适用于在较小数组或没有排好序的数组中查找。
+
+二分查找法前提条件是数组排好序，后置条件是如果关键词在列表中，则方法返回其匹配元素的下标，否则返回一个负整数，满足-k-1为插入该关键词的位置。优点是效率较高。
+
+
+
+基本思想：对于给定值 key，从序列的中间位置开始比较，如果当前位置值等于 key，则查找成功；若 key 小于当前位置值，则在数列的前半段中查找；若 key 大于当前位置值则在数列的后半段中继续查找，直到找到为止。
+
+```java
+public static int binarySearch(int[] list,int key){
+        int low=0;
+        int high=list.length-1;
+        while(high>=low){
+            int mid=(high+low)/2;
+            if(key<list[mid]){
+                high=key-1;
+            }
+            else if(key==list[mid]){
+                return mid;
+            }
+            else{
+                low=mid+1;
+            }
+        }
+        return -low-1;//返回插入点位置比返回-1更加有效不可返回-low，避免list[0].
+    }
+```
+
+
+
+##### foreach循环
+
+不使用下标变量就可以顺序地遍历整个数组。
+
+```Java
+for(double e:mylist){
+    System.out.println(e);
+}//对mylist中每个元素e进行以下操作
+```
+
+##### 复制数组
+
+（1）循环语句逐个复制元素
+
+（2）使用System类中的静态方法arraycopy
+
+```
+arraycopy(sourceArray,srcPos,targetArray,tarPos,length);
+```
+
+
+
+（3）使用clone方法复制数组
+
+##### Cloneable接口
+
+Cloneable接口指定了一个对象可以被克隆。
+
+Cloneable接口是标记接口，无常量也没有方法。
+
+```java
+/** 
+ * A class implements the Cloneable interface to indicate to the {@link java.lang.Object#clone()} method that  
+ * it is legal for that method to make a field-for-field copy of instances of that class. 
+*/  
+public interface Cloneable {  
+}  
+```
+
+```java
+public class Student implements Cloneable {
+    
+    private String name;
+    private String gender;
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getGender() {
+        return gender;
+    }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    
+    @Override
+    protected Student clone() throws CloneNotSupportedException {
+        return (Student)super.clone();
+    }
+    @Override
+    public String toString() {
+        return " [name=" + name + ", gender=" + gender + "]";
+    }
+}
+
+
+
+
+```
+
+```java
+public class test_clone {
+    
+    public static void main(String[] args){
+        Student student1 = new Student();
+        student1.setName("Kevin");
+        student1.setGender("Male");
+        System.out.println("student1"+student1);
+        
+        try{
+            Student student2 = student1.clone();
+            System.out.println("Clone student2 from student1...");
+            System.out.println("student2"+student2);
+　　　　　  　System.out.println(student1.equals(student2));
+            System.out.println("Alter student2...");
+            student2.setName("Alice");
+            student2.setGender("Female");
+            System.out.println("student1"+student1);
+            System.out.println("student2"+student2);
+        }catch(CloneNotSupportedException e){
+            e.printStackTrace();
+        }
+    }
+
+}
+```
+
+student1和student2是两个内容相同的不同对象。clone方法复制的是数据域。
+
+类Object的clone方法是用protected关键字修饰，是为了避免创建每一个类都默认具有克隆能力。
