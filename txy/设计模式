@@ -1,0 +1,351 @@
+简单工厂模式
+简单工厂模式不是 23 种里的一种，简而言之，就是有一个专门生产某个产品的类。
+
+比如下图中的鼠标工厂，专业生产鼠标，给参数 0，生产戴尔鼠标，给参数 1，生产惠普鼠标。
+
+
+
+#include "stdafx.h"
+#include <iostream>
+//简单工厂模式是属于创建型模式，又叫做静态工厂方法(static Factory Method)模式，简单工厂模式是由一个工厂对象决定创建出来哪一种产品类的实例.
+//
+//简单工厂模式的实质是由一个工厂类根据传入的参数，动态决定应该创建哪一类产品类(这些产品类继承自一个父类或接口)的实例。打个比方
+//
+//假设有一个工厂，他能生产出A、B两种产品。当客户需要产品的时候一定要告诉共产是哪种产品，是A还是B。当新增加一种新产品的时候，那么就要去修改工厂的类。
+ 
+enum ProductType
+{
+    MOUSE_DELL = 1,
+    MOUSE_HP
+};
+ 
+// 1. 共同类
+class Mouse
+{
+public:
+    virtual void show() = 0;
+protected:
+private:
+};
+ 
+// 2. 实现类
+class Mouse_Dell:public Mouse
+{
+public:
+    void show()
+    {
+        std::cout << "Product A provided!" << std::endl;
+    }
+private:
+ 
+};
+ 
+class Mouse_Hp:public Mouse
+{
+public:
+    void show()
+    {
+        std::cout << "Product B provided!" << std::endl;
+    }
+private:
+ 
+};
+ 
+// 3.工厂类
+class Factory
+{
+public:
+    Mouse *Create(int i)
+    {
+        switch (i)
+        {
+        case MOUSE_DELL:
+            return new Mouse_Dell;
+            break;
+        case MOUSE_HP:
+            return new Mouse_Hp;
+            break;
+        default:
+            break;
+        }
+        return 0;
+    }
+};
+ 
+// 简单工厂模式的缺点是当新增产品的时候就要去修改工厂的类，这就违反了开放封闭原则。(类、模块、函数)可以扩展，但是不可以修改。
+int _tmain(int argc, _TCHAR* argv[])
+{
+    Factory Fac;
+    Fac.Create(MOUSE_DELL)->show();
+    Fac.Create(MOUSE_HP)->show();
+    getchar();
+	return 0;
+}
+工厂模式
+工厂模式也就是鼠标工厂是个父类，有生产鼠标这个接口。
+
+戴尔鼠标工厂，惠普鼠标工厂继承它，可以分别生产戴尔鼠标，惠普鼠标。
+
+生产哪种鼠标不再由参数决定，而是创建鼠标工厂时，由戴尔鼠标工厂创建。
+
+后续直接调用鼠标工厂.生产鼠标()即可
+
+
+
+ 
+#include "stdafx.h"
+#include <iostream>
+//所谓工厂方法模式，是指定义一个用于创建对象的接口，让子类决定实例化哪一个类。打个比方
+//现在有A、B两种产品，那么就开两个工厂。工厂A负责生产A产品，工厂B负责生产B种产品。
+//这时候客户不需要告诉工厂生产哪种产品了，只需要告诉工厂生产就可以了。
+ 
+// 纯虚类
+class Product
+{
+public:
+    virtual void show() = 0;
+};
+// Product实现类
+class ProductA:public Product
+{
+public:
+    void show(){
+        std::cout << "Product A provided!" << std::endl;
+    }
+};
+ 
+class ProductB:public Product
+{
+public:
+    void show()
+    {
+        std::cout << "Product B provided!" << std::endl;
+    }
+};
+ 
+// 工厂纯虚类
+class Factory
+{
+public:
+    virtual Product* Create() = 0;
+};
+// 工厂实现类
+class FactoryA :public Factory
+{
+public:
+    Product* Create()
+    {
+        return new ProductA;
+    }
+};
+ 
+class FactoryB : public Factory
+{
+public:
+    Product* Create()
+    {
+        return new ProductB;
+    }
+};
+int _tmain(int argc, _TCHAR* argv[])
+{
+    Factory *FacA = new FactoryA;
+    Factory *FacB = new FactoryB;
+ 
+    FacA->Create()->show();
+    FacB->Create()->show();
+    getchar();
+	return 0;
+}
+抽象工厂模式
+抽象工厂模式也就是不仅生产鼠标，同时生产键盘。
+
+也就是 PC 厂商是个父类，有生产鼠标，生产键盘两个接口。
+
+戴尔工厂，惠普工厂继承它，可以分别生产戴尔鼠标+戴尔键盘，和惠普鼠标+惠普键盘。
+
+创建工厂时，由戴尔工厂创建。
+
+后续工厂.生产鼠标()则生产戴尔鼠标，工厂.生产键盘()则生产戴尔键盘。
+
+
+
+在抽象工厂模式中，假设我们需要增加一个工厂
+
+假设我们增加华硕工厂，则我们需要增加华硕工厂，和戴尔工厂一样，继承 PC 厂商。
+
+之后创建华硕鼠标，继承鼠标类。创建华硕键盘，继承键盘类即可。
+
+
+
+在抽象工厂模式中，假设我们需要增加一个产品
+
+假设我们增加耳麦这个产品，则首先我们需要增加耳麦这个父类，再加上戴尔耳麦，惠普耳麦这两个子类。
+
+之后在PC厂商这个父类中，增加生产耳麦的接口。最后在戴尔工厂，惠普工厂这两个类中，分别实现生产戴尔耳麦，惠普耳麦的功能。 以上。
+
+
+
+#include "stdafx.h"
+#include<iostream>
+ 
+// Mouse    -> Dell HP Asus
+// KeyBoard -> DELL Cherry Logith
+ 
+enum BrandType
+{
+    DELL,
+    HP,
+    ASUS,
+    CHERRY,
+    LOGITH
+};
+ 
+// 纯虚产品类
+class Mouse
+{
+public:
+    virtual void Mouse_show() = 0;
+};
+ 
+class Keyboard
+{
+public:
+    virtual void Keyboard_show() = 0;
+};
+ 
+// 产品实现类
+class Mouse_Dell:public Mouse
+{
+public:
+    void Mouse_show()
+    {
+        std::cout << "Dell Mouse Producted!" << std::endl;
+    }
+};
+ 
+class Keyboard_DELL :public Keyboard
+{
+public:
+    void Keyboard_show()
+    {
+        std::cout << "DELL Keyboard Producted!" << std::endl;
+    }
+};
+ 
+class Mouse_HP :public Mouse
+{
+public:
+    void Mouse_show()
+    {
+        std::cout << "HP Mouse Producted!" << std::endl;
+    }
+};
+ 
+class Mouse_Asus :public Mouse
+{
+public:
+    void Mouse_show()
+    {
+        std::cout << "HP Mouse Producted!" << std::endl;
+    }
+};
+ 
+class Keyboard_Cherry :public Keyboard
+{
+public:
+    void Keyboard_show()
+    {
+        std::cout << "Cherry Keyboard Producted!" << std::endl;
+    }
+};
+ 
+class Keyboard_Logith :public Keyboard
+{
+public:
+    void Keyboard_show()
+    {
+        std::cout << "Logith Keyboard Producted!" << std::endl;
+    }
+};
+ 
+// 纯虚工厂类
+class Factory
+{
+public:
+    virtual Mouse* ProductMouse(BrandType nType) = 0;
+    virtual Keyboard* ProductKeyboard(BrandType nType) = 0;
+};
+ 
+// 实现工厂类
+// 根据品牌生成产品
+class Factory_Mouse :public Factory
+{
+public:
+    Mouse* ProductMouse(BrandType nType) override
+    {
+        switch (nType)
+        {
+        case DELL:
+            return new Mouse_Dell;
+            break;
+        case HP:
+            return new Mouse_HP;
+            break;
+        case ASUS:
+            return new Mouse_Asus;
+        default:
+            return NULL;
+            break;
+        }
+    }
+    Keyboard* ProductKeyboard(BrandType nType)
+    {
+        return NULL;
+    }
+};
+ 
+// 根据品牌生成产品
+class Factory_Keyboard :public Factory
+{
+public:
+    Mouse* ProductMouse(BrandType nType) override
+    {
+        return NULL;
+    }
+    Keyboard* ProductKeyboard(BrandType nType)
+    {
+        switch (nType)
+        {
+        case DELL:
+            return new Keyboard_DELL;
+            break;
+        case CHERRY:
+            return new Keyboard_Cherry;
+            break;
+        case LOGITH:
+            return new Keyboard_Logith;
+        default:
+            return NULL;
+            break;
+        }
+    }
+};
+ 
+int _tmain(int argc, _TCHAR* argv[])
+{
+    Factory *facMouse = new Factory_Mouse;
+    Factory *facKeyboard = new Factory_Keyboard;
+ 
+    auto Imp = facMouse->ProductMouse(DELL);
+    auto Imp2 = facKeyboard->ProductKeyboard(DELL);
+    auto Imp3 = facMouse->ProductMouse(ASUS);
+ 
+    Imp->Mouse_show();
+    Imp2->Keyboard_show();
+    Imp3->Mouse_show();
+ 
+    getchar();
+	return 0;
+}
+
