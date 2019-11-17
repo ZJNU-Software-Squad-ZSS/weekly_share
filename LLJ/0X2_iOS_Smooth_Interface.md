@@ -101,9 +101,9 @@ Tip：把对象捕获到 `block` 中，然后扔到后台队列去随便发送�
 
 `Autolayout` 是苹果本身提倡的技术，在大部分情况下也能很好的提升开发效率，但是 `Autolayout` 对于复杂视图来说常常会产生严重的性能问题。
 
-随着视图数量的增长，`Autolayout` 带来的 CPU 消耗会呈指数级上升。具体数据可以看这个文章：http://pilky.me/36/。 
+随着视图数量的增长，`Autolayout` 带来的 CPU 消耗会呈指数级上升。[具体数据可以看这个文章](http://pilky.me/36/)
 
-如果你不想手动调整 `frame` 等属性，可以用一些工具方法替代（比如常见的 `left/right/top/bottom/width/height` 快捷属性），或者使用 `ComponentKit`、`AsyncDisplayKit` 等框架。
+如果不想手动调整 `frame` 等属性，可以用一些工具方法替代（比如常见的 `left/right/top/bottom/width/height` 快捷属性），或者使用 `ComponentKit`、`AsyncDisplayKit` 等框架。
 
 * 文本计算
 
@@ -170,6 +170,9 @@ GPU主要工作：`接收提交的纹理（Texture）和顶点描述（三角形
 
 避免这种情况，可以尝试开启 `CALayer.shouldRasterize` 属性，但这会把原本离屏渲染的操作转嫁到 CPU 上去。对于只需要圆角的某些场合，也可以用一张已经绘制好的圆角图片覆盖到原本视图上面来模拟相同的视觉效果。最彻底的解决办法，就是把需要显示的图形在后台线程绘制为图片，避免使用圆角、阴影、遮罩等属性。
 
+## AsyncDisplayKit
+
+> AsyncDisplayKit 是 Facebook 开源的一个用于保持 iOS 界面流畅的库
 
 
 
