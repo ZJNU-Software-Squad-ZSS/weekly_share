@@ -174,6 +174,29 @@ GPU主要工作：`接收提交的纹理（Texture）和顶点描述（三角形
 
 > AsyncDisplayKit 是 Facebook 开源的一个用于保持 iOS 界面流畅的库
 
+### 相关资料
+
+ASDK原理和细节
+
+[ASDK 的基本原理1](https://www.youtube.com/watch?v=-IPMNWqA638)
+
+[ASDK 的基本原理2](https://www.youtube.com/watch?v=ZPL4Nse76oY)
+
+[ASDK 2.0 新特性介绍](https://www.youtube.com/watch?v=RY_X7l1g79Q)
+
+ASDK相关的讨论
+
+[关于 Runloop Dispatch](https://github.com/facebook/AsyncDisplayKit/issues/42)
+
+[关于 ComponentKit 和 ASDK 的区别](https://github.com/facebook/AsyncDisplayKit/issues/70)
+
+[为什么不支持 Storyboard 和 Autolayout](https://github.com/facebook/AsyncDisplayKit/issues/132)
+
+[如何评测界面的流畅度](https://github.com/facebook/AsyncDisplayKit/issues/204)
+
+更多内容：
+https://groups.google.com/forum/#!forum/asyncdisplaykit
+
 
 
 
