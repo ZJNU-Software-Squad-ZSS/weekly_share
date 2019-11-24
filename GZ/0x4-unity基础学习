@@ -1,0 +1,98 @@
+# unity学习笔记
+### unity窗口介绍
+##### 1.Scene 场景编辑窗口
+##### 2.Game 游戏运行窗口
+##### 3.Hierarchy 场景物体列表窗口
+##### 4.Project 项目资源列表窗口
+##### 5.Inspector 属性编辑列表窗口
+##### 6.其他常用调节窗口
+
+#### 下面先介绍Scene 场景编辑窗口
+* 打开一个unity项目，屏幕左上方就是一个场景编辑窗口
+通过鼠标可以漫游整个场景，并选择物体进行编辑，如果这时我们按住q、w、e、r，四个键的时候可以看到左上方选择菜单发生了变化。
+* 第一个手势图标表示可以拖动屏幕，并进行移动。第二个指针指标表示可以移动选择物体的位移。第三个代表可以相对旋转，第四个代表改变物体的大小，回复到初始状态使用Ctrl+Z
+* 此时滑动鼠标可以对镜头进行旋转，同时摁W\S可以对镜头进行前后位移，A\D可以对镜头进行左右位移，Q\E可以对镜头进行上下位移。
+
+#### Game 游戏运行窗口
+* 游戏运行窗口指的是玩家所要看到的画面，在游戏运行当中如果对物体进行修改，此次修改将不会存盘，也就是说此次修改只会在游戏中显示，在游戏结束时将会回到初始状态。在game窗口的左上角可以调试游戏显示的长宽比。free aspect 代表全屏显示，standalone代表所要发布场景的长宽比，右边Maximize on play 代表游戏下一次运行时将全屏播放，status控制是否显示游戏运行是的各项参数。Gizmes控制游戏是否显示游戏的各种标记，诸如光源、粒子效果。
+
+#### Hierarchy 场景物体列表窗口
+* 在unity中所有场景物体都以列表形势展现在hierarchy场景中。比如光源、建筑物。点击可以追踪，可以用搜索菜单搜索物体。三角符号表示物体之间的父子关系。
+#### Project 项目资源列表窗口
+* 与项目文件夹显示是一致的，有所区别的是在文件夹中unity会自动生成每个文件对应的meta文件，需要注意的是文件夹中的meta是unity自动生成，要移动项目中的资源不要在文件窗口移动，需要改动要在unity内部进行，否则就会报错。Favorite菜单可以用来查找特定类型的资源。我们也可以自己标记资源.
+#### Inspector 属性编辑列表窗口
+* 所有的项目资源都在此列表编辑。其中transform是所有资源都有的位置属性。
+#### 其他窗口
+* 上面对基础窗口进行了介绍，unity还有很多其他窗口，比如layers,unity store等，这些窗口根据不同的版本变动还是蛮大的。
+## 下面介绍两个比较常用的功能
+### 通过Transform组件移动物体
+* Transform组件用于描述物体在空间中的状态，它包括位置(position)，旋转(rotation)和缩放(scale)。 其实所有的移动都会导致position的改变，这里所说的通过Transform组件来移动物体，指的是直接操作Transform来控制物体的位置(position)。
+* 下面介绍最简单的，通过键盘（W、S、A、D)对物体的移动。
+```
+public float m_speed = 5f; //规定速度
+//Translate移动控制函数 
+void MoveControlByTranslate() { 
+if (Input.GetKey(KeyCode.W)|Input.GetKey(KeyCode.UpArrow)) //前 
+{
+this.transform.Translate(Vector3.forward*m_speed*Time.deltaTime);
+ } 
+if (Input.GetKey(KeyCode.S) | Input.GetKey(KeyCode.DownArrow)) //后 
+{ 
+this.transform.Translate(Vector3.forward *- m_speed * Time.deltaTime);
+ } 
+if (Input.GetKey(KeyCode.A) | Input.GetKey(KeyCode.LeftArrow)) //左 
+{
+ this.transform.Translate(Vector3.right *-m_speed * Time.deltaTime); 
+}
+ if (Input.GetKey(KeyCode.D) | Input.GetKey(KeyCode.RightArrow)) //右 
+{ 
+this.transform.Translate(Vector3.right * m_speed * Time.deltaTime); 
+} 
+}
+```
+或者
+```
+//Translate移动控制函数
+void MoveControlByTranslateGetAxis() { 
+float horizontal = Input.GetAxis("Horizontal"); //A D 左右
+float vertical = Input.GetAxis("Vertical"); //W S 上 下
+transform.Translate(Vector3.forward * vertical * m_speed * Time.deltaTime);//W S 上 下 transform.Translate(Vector3.right * horizontal * m_speed * Time.deltaTime);//A D 左右
+ }
+```
+### 使用Rigidbody和Collider对碰撞状态的检测。
+* 先直接上代码
+```
+// 开始接触 
+     void OnTriggerEnter(Collider collider) {
+          Debug.Log("开始接触"); 
+     } 
+  
+     // 接触结束 
+     void OnTriggerExit(Collider collider) { 
+         Debug.Log("接触结束");
+     }
+ 
+     // 接触持续中
+     void OnTriggerStay(Collider collider) {
+         Debug.Log("接触持续中");
+     }
+```
+* 上面三个函数对两物体整个的碰撞过程进行了检测并输出出来，如果是弹性物体还可以测出碰撞的次数。除此之外在碰撞过程中它是每一帧都会进行一个检测，直到退出碰撞。（注：为了确保他能碰撞到需要勾上触发器）
+* 如果想要查看是与哪个物体发生的碰撞需要用到下面这个函数
+```
+// 碰撞开始
+void OnCollisionEnter(Collision collision) {
+         var name = collision.collider.name;
+ 
+         Debug.Log("Name is " + name);
+     }
+```
+同样可以获得碰撞物体的tag
+```
+// 碰撞开始
+     void OnCollisionEnter(Collision collision) {
+         var tag = collision.collider.tag;
+ 
+         Debug.Log("Tag is " + tag);
+     }
+```
