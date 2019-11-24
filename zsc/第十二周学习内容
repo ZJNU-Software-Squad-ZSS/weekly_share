@@ -1,0 +1,102 @@
+#### 第十二周学习内容
+
+##### 代码注入
+
+###### 定义
+
+用户可以提交一段数据库查询代码，根据程序返回的结果，获得某些他想得知的数据，这就是所谓的SQL Injection，即SQL注入。
+
+###### 用途
+
+恶意使用：透过代码注入技术在黑或者破解系统上，以获取信息、提权、或者非法访问某系统。
+
+善意使用：透过代码注入以改变或者调试某程序或者系统的行为可以"摆弄"系统以某种方式表现其行为而不怀任何恶意。
+
+非蓄意使用：某些用户可能会不经意的进行代码注入，因为他们对程序提供的输入，没列在当初开发系统者的考虑中。
+
+###### 代码注入方法
+
+远程线程的注入方式
+
+远程线程注入方式使用的关键API为[CreateRemoteThread](https://msdn.microsoft.com/en-us/library/windows/desktop/ms682437(v=vs.85).aspx)，原型如下：
+
+```java
+HANDLE WINAPI CreateRemoteThread(
+  _In_  HANDLE                 hProcess,
+  _In_  LPSECURITY_ATTRIBUTES  lpThreadAttributes,
+  _In_  SIZE_T                 dwStackSize,
+  _In_  LPTHREAD_START_ROUTINE lpStartAddress,
+  _In_  LPVOID                 lpParameter,
+  _In_  DWORD                  dwCreationFlags,
+  _Out_ LPDWORD                lpThreadId
+);
+```
+
+通过远程线程方式实现DLL注入主要是在lpStartAddress和lpParameter这2个参数上面做文章。
+`lpStartAddress`参数和`CreateThread`函数的一样，都是线程的处理过程函数，函数原型如下：
+
+```
+DWORD WINAPI ThreadProc(LPVOID lpParameter);
+```
+
+加载DLL使用的API是`LoadLibraryA`或`LoadLibraryW`，原型如下
+
+```
+HMODULE WINAPI LoadLibrary(LPCTSTR lpFileName);
+```
+
+对比`LoadLibrary`和线程处理函数(`LPTHREAD_START_ROUTINE`)的原型，我们发现两者的函数的原型基本相同。虽然不是完全相同，但都是接收一个指针参数，而且都是返回一个值，并且调用约定也都是`WINAPI`。
+
+我们完全可以利用下它们之间的相似性，把线程处理函数的地址设为`LoadLibraryA`或`LoadLibraryW`，类似下面这样：
+
+```
+HANDLE hThread = CreateRemoteThread(hProcessRemote, 
+    NULL, 
+    0, 
+    LoadLibraryA, 
+    "C:\\InjectDll.dll", 
+    0, 
+    NULL
+);
+```
+
+当CreateRemoteThread创建的新线程在远程进程地址空间中被创建的时候，就会立即调用LoadLibraryA函数，并传入DLL路径的地址作为其参数。
+
+使用注册表方式完成DLL注入
+
+通过注册表的方式来实现DLL注入，我们只需要针对特定的注册表项进行修改即可，有一点需要注意的是：如果被注入的进程是64位进程，则注入的DLL也需要是64位的，同理，注入32位的进程也需要是32位的DLL。
+
+1) 将被注入的DLL名称填入到`AppInit_DLLs`注册表项
+
+2) 并将`LoadAppInit_DLLs`注册表项的值修改为`1`
+
+注入64位系统上的32位进程
+
+```
+HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Windows\AppInit_DLLs
+```
+
+```
+HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\Windows NT\CurrentVersion\Windows\LoadAppInit_DLLs
+```
+
+注入64位系统的64位进程
+
+```
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows\AppInit_DLLs
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Windows\LoadAppInit_DLLs
+```
+
+
+
+###### 如何避免代码注入
+
+要避免代码注入的种种问题，得充分发挥输入输出处理保全，例如：
+
+- 输入确认。
+- 更换危险字符。例如在PHP透过addslashes()函数保护SQL注入。
+- 输入编码。
+- 输出编码。
+- 采用其他没有饱受代码注入漏洞困扰的编程实现，例如“参数化SQL查询” ("parameterized SQL queries" 又名 "prepared statements" 亦有时称 "bind variables")
+
+https://blog.csdn.net/china_jeffery/article/details/79759449
