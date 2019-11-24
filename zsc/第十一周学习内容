@@ -1,0 +1,119 @@
+#### 第十一周学习内容
+
+ 
+
+###### 对象的引用与对象
+
+```Java
+Role role =new Role();
+User user =new User();
+```
+
+  role为对象引用，new Role 为new 一个对象,这个对象储存在heap segment（堆）里。()为在对象创建后，立刻调用构造方法对刚生成的对象进行初始化。
+
+所以	role = user;	的意识是使role指向user所指向的对象。
+
+###### JVM的内存
+
+一共有四个部分：
+stack segment	heap segment	code segment	data segment
+申明一个局部变量，存放在stack segment
+new 一个对象，存放在heap segment
+static变量和字符串常量，存放在data segment
+类中的方法，存放在code segment  
+
+###### UML关系图
+
+各种关系的强弱顺序：泛化 = 实现 > 组合 > 聚合 > 关联 > 依赖 
+
+泛化：是一种继承关系，表示一般与特殊的关系，它指定了子类如何特化父类的所有特征和行为。
+
+实现：是一种类与接口的关系，表示类是接口所有特征和行为的实现.
+
+关联：是一种拥有的关系，它使一个类知道另一个类的属性和方法
+
+聚合：是整体与部分的关系，且部分可以离开整体而单独存在。
+
+组合：是整体与部分的关系，但部分不能离开整体而单独存在。
+
+依赖：是一种使用的关系，即一个类的实现需要另一个类的协助，所以要尽量不使用双向的互相依赖.
+
+###### 正则表达式
+
+正则表达式定义了字符串的模式。
+
+正则表达式可以用来搜索、编辑或处理文本。 
+
+正则表达式并不仅限于某一种语言，但是在每种语言中有细微的差别。
+
+字符串匹配
+
+```java
+public static void main(String[] args) {
+    // 要验证的字符串
+    String str = "service@xsoftlab.net";
+    // 邮箱验证规则
+    String regEx = "[a-zA-Z_]{0,}[0-9]{0,}@(([a-zA-z0-9]-*){1,}\\.){1,3}[a-zA-z\\-]{1,}";
+    // 编译正则表达式
+    Pattern pattern = Pattern.compile(regEx);
+    // 忽略大小写的写法
+    // Pattern pat = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE);
+    Matcher matcher = pattern.matcher(str);
+    // 字符串是否与正则表达式相匹配
+    boolean rs = matcher.matches();
+    System.out.println(rs);
+}
+
+```
+
+字符串查找
+
+```java
+public static void main(String[] args) {
+    // 要验证的字符串
+    String str = "这是一个正则表达式字符串查找的示例12345，正则表达式好厉害呀45678";
+    // 正则表达式规则
+    String regEx = "\\d+";
+    // 编译正则表达式
+    Pattern pattern = Pattern.compile(regEx);
+    // 忽略大小写的写法
+    // Pattern pat = Pattern.compile(regEx, Pattern.CASE_INSENSITIVE);
+    Matcher matcher = pattern.matcher(str);
+    // 查找字符串中是否有匹配正则表达式的字符/字符串
+    while (matcher.find()) {
+        System.out.println(matcher.group());
+    }
+}
+
+```
+
+单行匹配与多行匹配
+
+默认情况下（.*）只匹配除换行符（\n）以外的字符，如果要匹配的字符串是多行，则正则表达式会在遇到时\n停止。
+
+```java
+public static void main(String[] args) {
+    String str = "---123\n456---";
+    // 单行匹配 - 不会被替换
+    System.out.println(str.replaceAll("---.*---", "SUCCESS"));
+    // 多行匹配 - 匹配并替换
+    System.out.println(str.replaceAll("(?s)---.*---", "SUCCESS"));
+    // 多行匹配 - 另一种方式
+    Pattern pattern = Pattern.compile("---.*---", Pattern.DOTALL);
+    System.out.println(pattern.matcher(str).replaceAll("SUCCESS"));
+}
+
+```
+
+常用正则表达式
+
+| 规则               | 正则表达式语法                                               |
+| ------------------ | ------------------------------------------------------------ |
+| 汉字（包含符号）   | [\\u0391-\\uFFE5]+                                           |
+| 汉字（不包含符号） | [\\u4e00-\\u9fa5]+                                           |
+| 邮箱               | [a-zA-Z_]{0,}[0-9]{0,}@(([a-zA-z0-9]-*){1,}\.){1,3}[a-zA-z\-]{1,} |
+| 邮编               | [1-9]\\d{5}                                                  |
+| 账号               | [A-Za-z][A-Za-z0-9_-]+                                       |
+| 手机号             | 1\\d{10}                                                     |
+| Excel文件          | .*\.xls(x)?$                                                 |
+| 18位身份证         | \\d{6}(18\|19\|20)\\d{2}[01]\\d[0123]\\d\\d{3}[0-9xX]{1}     |
