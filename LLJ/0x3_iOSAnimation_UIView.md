@@ -1,7 +1,7 @@
 # iOS UIView Animation
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic1.gif" width="580">
 </p>
 
 ## 登陆动画
@@ -10,13 +10,13 @@
 示例：
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic2.gif" width="580">
 </p>
 
 动画原理： 两个文本框从屏幕左边进入，下方的按钮从隐藏（alpha实现）到显示。
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic3.png" width="580">
 </p>
 
 简单来说可以写成：
@@ -90,7 +90,7 @@ psdCenter.x += 200;
 `center` 设置后视图会移动到一个新位置，修改后会结合bounds重新计算frame
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic4.png" width="580">
 </p>
 
 ### 视图显示类 属性
@@ -100,7 +100,7 @@ psdCenter.x += 200;
 `hidden` 修改此属性可以制作翻页隐藏的效果
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic5.png" width="580">
 </p>
 
 ### 形态变化类 属性
@@ -108,7 +108,7 @@ psdCenter.x += 200;
 `transform` 修改此属性可以实现旋转、形变、移动、翻转等动画效果，其通过矩阵运算的方式来实现，因此更加强大
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic6.png" width="580">
 </p>
 
 ## 动画参数
@@ -137,7 +137,7 @@ psdCenter.x += 200;
 ```
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic7.gif" width="580">
 </p>
 
 效果是密码框不断的循环进入屏幕，反方向退出屏幕。登录按钮始终没有渐变出现。
@@ -148,7 +148,7 @@ psdCenter.x += 200;
 >> 任何事物都不能突然间的开始移动和停下，例如车辆启动和停止都有一个加速和减速的过程。
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic8.png" width="580">
 </p>
 
  系统提供的类似的效果的参数
@@ -180,7 +180,7 @@ psdCenter.x += 200;
 ```
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic9.gif" width="580">
 </p>
 
 > 在模拟器运行状态下，点击上面的菜单栏 DEBUG -> Slow Animation 或者快捷键 command + T，来放慢app的动画运行速度（在iPhone11的模拟器上运行）。
@@ -233,13 +233,13 @@ isAnimating = NO;
 这个方法跟上面的animateWithDuration系列方法相比多了一个UIView类型的参数，这个参数接收的对象作为动画的作用者。这段代码点击之后的动画效果如下：
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic10.gif" width="580">
 </p>
 
 > 模拟器下使用command+T放慢了动画的速度之后截取的翻转的四张图片：
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic11.png" width="580">
 </p>
 
 在切换图片的时候，原有的图片会基于视图中心位置进行x轴上的翻转，为了达到更逼真的效果，系统会在切换中加上了阴影效果
@@ -262,7 +262,7 @@ isAnimating = NO;
 效果：
 
 <P align=center>
- <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x0_pic1.svg" width="580">
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic12.gif" width="580">
 </p>
 
 小球弹出的动画代码：
@@ -283,5 +283,10 @@ cell.center = startCenter;
 ## 总结
 
 相比起PC端的粗糙，移动端的应用需要更加精致，精致复杂的动画都是源于一个个简单的动画组合而成的。最后吐槽一下今天网络很差。不管是实验室还是寝室还是手机热点，打开外网太慢了。
+
+<P align=center>
+ <img src="https://cdn.jsdelivr.net/gh/AppleisTasty/Materials/0x3_pic13.gif" width="580">
+</p>
+
 
 
