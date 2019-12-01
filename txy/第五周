@@ -1,0 +1,186 @@
+决策树
+决策树（Decision Tree）是一种非参数的有监督学习方法，它能够从一系列有特征和标签的数据中总结出决策规则，并用树状图的结构来呈现这些规则，以解决分类和回归问题。
+
+优点：
+
+　　简单易懂，容易解释，可视化，适用性广
+
+缺点：
+
+　　容易过拟合，
+
+　　数据中的小变化会影响结果，不稳定，
+
+　　每一个节点的选择都是贪婪算法，不能保证全局最优解。
+
+　　
+
+树模型
+　　决策树：
+　　　　从根节点开始一步步走到叶子节点（决策）
+　　　　所有的数据最终都会落到叶子节点，既可以做分类也可以做回归
+
+　　树的组成：
+　　　　根节点：第一个选择点
+　　　　非叶子节点与分支：中间过程
+　　　　叶子节点：最终的决策结果
+
+核心问题
+　　如何选出最佳节点和最佳分支？
+
+　　决策树剪枝策略
+
+ 
+
+　　如何选出最佳节点和最佳分支？
+　　　　每一步都选择最好的节点分支
+
+　　　　衡量标准-熵：
+
+　　　　　　熵是表示随机变量不确定性的度量，即事物的混乱程度。
+
+　　　　　　　　H(X)=- ∑ pi * logpi, i=1,2, ... , n
+
+　　　　　　　　熵值低，相对稳定。
+
+　　　　　　　　p=0或p=1时，H(p)=0，没有不确定性
+
+　　　　　　　　p=0.5时，H(p)=1，不确定性最大
+
+　　　　ID3：信息增益
+
+　　　　　　特征属性值多的信息增益大，不能处理特征属性值连续的情况
+
+　　　　C4.5：信息增益率，考虑自身熵
+
+　　　　CART：使用了GINI系数作为衡量标准
+
+ 
+
+　　决策树剪枝策略
+　　　　决策树过拟合风险很大，理论上可以完全分得开数据
+
+　　　　　　剪枝策略：
+
+　　　　　　　　预剪枝：边建立决策树边进行剪枝的操作，实用
+
+　　　　　　　　　　控制树的深度。 样本数和节点数
+
+　　　　　　　　　　叶子节点个数，叶子节点样本数，信息增益量
+
+　　　　　　　　后剪枝：完成决策树后进行剪枝操作
+
+　　　　　　　　　　通过一定的衡量标准
+
+　　　　　　　　　　叶子节点越多，损失越大
+
+sklearn中的决策树
+模块sklearn.tree
+
+tree.DecisionTreeClassiﬁer 
+
+分类树
+tree.DecisionTreeRegressor	回归树
+tree.export_graphviz	将生成的决策树导出为DOT格式，画图专用
+tree.ExtraTreeClassiﬁer	高随机版本的分类树
+tree.ExtraTreeRegressor	高随机版本的回归树
+ View Code
+重要参数
+criterion：不纯度的计算方法，效果基本相同
+
+　　默认为“gini”，基尼系数
+
+　　　　通常使用，维度大，噪音大时使用，
+
+　　输入“entropy”，使用信息熵
+
+　　　　涉及对数，计算较慢，对于高维数据或者噪声很多的数据容易过拟合。
+
+random_state：用来设置分支中的随机模式的参数，高维效果明显
+
+　　默认None，输入任意整数
+
+splitter：string，optional（default =“best”）
+
+　　best：选择最佳分割
+
+　　random：随机选择拆分策略
+
+max_depth : int or None, optional (default=None)
+
+　　树的最大深度
+
+min_samples_split : int, float, optional (default=2)
+
+ 
+
+　　拆分节点所需的最小样本数
+
+min_samples_leaf : int, float, optional (default=1)
+
+　　拆分节点后的叶子节点的最小样本数，满足时才进行拆分。
+
+min_weight_fraction_leaf : float, optional (default=0.)
+
+ 
+
+　　
+
+max_features : int, float, string or None, optional (default=None)
+
+　　考虑的特征数量，int，float，“auto”，“sqrt”，“log2”，None
+
+min_impurity_decrease : float, optional (default=0.)
+
+　　最小信息熵增益
+
+重要属性
+feature_importances_ : array of shape = [n_features]
+
+　　返回特征重要性。
+
+max_features_ : int,
+
+ 
+
+　　最大特征
+
+n_features_ : int
+
+　　fit执行时的特征数量
+
+n_outputs_ : int
+
+ 
+
+　　fit执行时的输出数量
+
+tree_ : Tree object
+
+　　树对象
+
+重要方法
+
+apply(X[, check_input])
+
+　　每个样本在叶子节点的索引
+
+decision_path(X[, check_input])
+
+　　树中的决策路径
+
+fit(X, y[, sample_weight, check_input, …])
+
+predict(X[, check_input])
+
+　　预测类或回归值
+
+get_params([deep])：
+
+　　获取参数
+
+set_params(**params)
+
+　　设置参数
+
+score(X, y[, sample_weight])
