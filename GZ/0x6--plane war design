@@ -1,0 +1,45 @@
+# Project explanation：
+This application implements a space battle between humans spaceship and monsters spaceship that want to attack planet Earth.
+So the game consists of a “human” spaceship that fights against “monster” spaceships and has to destroy as many monster space shuttles as possible.
+
+This game must work as following described:
+
+1.Human spaceship:  can move left and right and back and forward, shooting Rockets to destroy monster’s shuttle.
+
+2.Monster spaceship:  can move from top to down and when destroyed by some human rockets, it must emerge in a some top position. Besides  there are two types of monster spaceships:
+
+a.Monster 1 spaceship cannot shoot rockets and when destroyed you earn 2 point
+b.Monster 2 spaceship can shoot rocket toward human spaceship and when destroyed you earn 5 points 
+
+3.Collecting points : collecting and showing the total score, as you destroy an enemy.
+4.Human and Monster all have life-times: for example, Human can have 3 life-times and monster can have 5 life-times and when it is collided with rocket its life will be decrease one and when the life-time is zero, it will be destroyed.
+
+* Personal understanding: this is a simple game, the main play is to control their own aircraft, firing bullets, destroy the enemy aircraft to get points. The enemy plane is divided into two kinds, one can move only, do not fire bullets, but hit the players will give players a little damage, there is a kind of the enemy is a while launching a bullet, and players can automatically find the bullet requirements the plane location, but will give players a little time to react, players can own aircraft through the keyboard control about moving up and down and bullets, players only have three lives, encounter the enemy planes hit by the enemy's bullets or lose a life, three lives are not the game will end. The screen can record the score, as well as the number of lives currently available. When the game is over, you can start again, but you will record the highest score in history. This is just a simple implementation of the game. If you want to upgrade the game, you can accelerate the firing speed of bullets to the enemy behind, increase the frequency of enemy generation, and increase the types of enemy, enemy speed and so on.
+# Project implementation : game design
+* Set the background first, build a plane, the name is changed to star for stars. Give it the picture of the sky.
+* Select star and click Windows --animation--add property--mesh render to create a new animation, remove the previous time node, then change the time to 30 seconds, switch to curves and change the curve to linear. This gives you a background effect that moves evenly over time.
+* Then build a plane, call it mar, give him the picture of mar.
+* In the dynamic inside occluded set inside the shader to legacy shaders /Transparent /Cutout /Diffuse
+* Then convert the sence perspective to the z-x perspective
+* Click the light source to close the shadow
+* Make a copy of the original rocket, then give the enemy rocket a picture of the enemy rocket, and name the bullets player rocket and enemy rocket, respectively. Add rigidbody and Box collider to the bullet, remove gravity, and trigger and kinematic.
+* Give rocket.cs to player rocket
+Give Player. Cs to the Player, and then the rocket to the Player, and then the rigidbody and the Box collider without the gravity, and then trigger and kinematic. Select an explosion effect and give it tag set to player. Such a moving plane controlled by the player is done
+* give Enemy rocket. Cs to Enemy rocket
+* give Super enemy. Cs to Super enemy, then enemy rocket to Super enemy, and finally Super enemy plus rigidbody and Box collider minus gravity, plus trigger and kinematic. I'm gonna go ahead and give it an explosion, tag is enemy, so I have a Super enemy.
+* give Enemy. Cs to enemy, then enemy plus rigidbody and Box collider minus gravity, plus trigger and kinematic. I'm going to go ahead and select an explosion effect and I'm going to set tag to enemy, and I'm going to have an enemy.
+
+* Create a spawnpoint and give enemy spawn. Cs to spawnpoint. Use Ctrl+D to copy 4, adding one spawnpoint to super enemy and the other 4 to regular enemy.
+* Create a new Empty in Hierarchy, rename it GameManager, and give GameManager. Cs to GameManager.
+* I'm going to create two new UI's --text,Reset them. Put these two uis in the GameManager to score TXT and hisore TXT. One represents the current grade and one represents the highest grade. Put music inside the music clip, and then add the audio source component.
+* Create a cube, stretch it out, hide it, put bound inside its tag, add Box collider and trigger. Represents the boundary, which disappears when the enemy touches it.
+# Project implementation : logic implementation
+* For the player, let's define the number of hits the player can get, which is hit point, and the game ends when hit point is 0
+* For a player's bullet, let's define the bullet's damage, which is how much blood the enemy loses after each bullet hits them. In order not to have too many bullets, we put a limit on how long bullets can live, and then time will disappear.
+* For normal enemies, we defined the enemy's health and the enemy's score
+* For the super enemy, we added the frequency of the tracking shot.
+* For the enemy's birth point, add the frequency of the enemy's presence
+* In addition to this, there is a UI that keeps track of the authority score and the highest score. This is to add all the enemy scores destroyed by the algorithm.
+* When an enemy unit loses life, it is destroyed, and it explodes. Similarly, if the player USES up all three chances, the game is over.
+# conclusion
+* This small game let me see the 3D game into a flat language a process, especially at the beginning of the starry sky background dynamic production let me feel the magic. This game is just a simple implementation, but some basic functions have, we can completely complicate the game, increase the user's adhesion. Such as the life blood of these things, we can give him into energy, and every time a consume much energy is needed to launch a bullet, and then we make energy over time slowly recovering, it can restrict players have been using bullets, we can also add some random to game props, such as killing enemy planes will be after random props, players will get after he ate some special shells or short of a violent or the state of the dam body and so on. These are the things that need to be perfected in the future. Of course, the lessons learned in this game are not only applicable to this game, but also can be applied to other games！
