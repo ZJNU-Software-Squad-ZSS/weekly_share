@@ -1,0 +1,576 @@
+浅谈设计模式
+软件设计在项目开发的过程中越来越起到重要的作用。在我们学习开发的过程中，也逐步能够发现框架在软件开发过程中的便捷性，在我看来框架的开发是设计模式的一种体现。在写代码的过程中我们也能够发现构建一个优秀的系统最困难之处不在于编码（coding），而是在早期做出的设计（design）上的决定。设计是软件开发生命周期中的关键阶段，好的设计能产生好的产品，而不当的设计则会影响最终产品的质量。
+  设计模式的作用：
+1.	设计模式以一种标准的方式供广大开发人员使用，为开发者的沟通提供了一套机制，帮助开发者更好地明白和更清晰地描述一段被给出的代码。
+2.	设计模式可以使人们更加方便简单的复用成功的设计模式和结构
+3.	设计模式可以使人们深入理解面向对象的设计思想，提高软件的开发效率，节约设计成本。
+设计模式又能够分成创建型设计模式，结构设计模式，行为型模式。
+此报告就浅谈一下四个经典的设计模式：工厂模式，装饰器模式，迭代器模式，数据访问对象模式。
+一．工厂模式
+工厂模式是java开发中最常用的设计模式之一，也是我们最常用的实例化对象模式了，是用工厂方法代替new操作的一种模式。
+意图：定义了一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，工厂模式使其创建过程延迟到子类进行，解决了接口选择的问题。
+何时使用：我们明确地计划不同条件下创建不同实例时。
+如何解决：让其子类实现工厂接口，返回的也是一个抽象的产品。
+关键代码：创建过程在其子类执行。
+应用实例：您需要一辆汽车，可以直接从工厂里面提货，而不用去管这辆汽车是怎么做出来的，以及这个汽车里面的具体实现。
+优点：1.一个调用者想创建一个对象，只要知道名称就可以。2.扩展性提高，如果想增加一个产品，只要扩展一个工厂类就可以。3.屏蔽产品的具体实现，调用者只关心产品的接口。
+缺点：每次增加一个产品时，都需要增加一个具体类和对象实现工厂，使得系统中类的个数成倍增加，在一定程度上增加了系统的复杂度，同时也增加了系统具体类的依赖。
+下面来看一下代码的具体例子。
+我喜欢吃面条，抽象一个面条基类，（接口也可以），这是产品的抽象类。
+public abstract class INoodles {
+    /**
+     * 描述每种面条啥样的
+     */
+    public abstract void desc();
+}
+先来一份兰州拉面（具体产品类）
+public class LzNoodles extends INoodles {
+    @Override
+    public void desc() {
+        System.out.println("兰州拉面 上海的好贵 家里才5 6块钱一碗");
+    }
+}
+程序员加班必备也要吃泡面（具体的产品类）：
+public class PaoNoodles extends INoodles {
+    @Override
+    public void desc() {
+        System.out.println("泡面好吃 可不要贪杯");
+    }
+}
+准备工作做完了，我们来到一家“简单面馆”（简单工厂类），菜单如下：
+public class SimpleNoodlesFactory {
+    public static final int TYPE_LZ = 1;//兰州拉面
+    public static final int TYPE_PM = 2;//泡面
+    public static final int TYPE_GK = 3;//干扣面
+
+    public static INoodles createNoodles(int type) {
+        switch (type) {
+            case TYPE_LZ:
+                return new LzNoodles();
+            case TYPE_PM:
+                return new PaoNoodles();
+            case TYPE_GK:
+            default:
+                return new GankouNoodles();
+        }
+    }
+}
+简单面馆就提供三种面条（产品），你说要啥，他就给你啥。这里我点了一份干扣面
+INoodles noodles = SimpleNoodlesFactory.createNoodles(SimpleNoodlesFactory.TYPE_GK);
+ noodles.desc();
+输出：还是家里的干扣面好吃 6块一碗
+在学习和了解工厂模式之后有了自己一点的理解：工厂模式把创建和使用的过程分开来了。工厂模式可以降低代码重复。如果创建对象的过程都很复杂，需要一定的代码量，而且很多地方都要用到，那么就会有很多的重复代码。我们可以这些创建对象的代码放到工厂里统一管理。既减少了重复代码，也方便以后的创建过程的修改维护。另外，因为工厂管理了对象的创建逻辑，使用者并不需要知道具体的创建过程，只管使用即可，减少了使用者因为创建逻辑导致的错误。
+二．装饰器模式
+  装饰器模式是为已有功能动态的添加更多功能的一种方式，同时又改变其结构。这种模式创建了一个装饰类，用来包装所有的类，并在保存类方法签名的完整性的前提下，提供了额外的功能。
+  其结构图如下：
+ 
+Component为统一接口，也是装饰类和被装饰类的基本类型。
+ConcreteComponent为具体实现类，也是被装饰类，他本身是个具有一些功能的完整的类。
+Decorator是装饰类，实现了Component接口的同时还在内部维护了一ConcreteComponent的实例，并可以通过构造函数初始化。而Decorator本身，通常采用默认实现，他的存在仅仅是一个声明：我要生产出一些用于装饰的子类了。而其子类才是赋有具体装饰效果的装饰产品类。
+ConcreteDecorator是具体的装饰产品类，每一种装饰产品都具有特定的装饰效果。可以通过构造器声明装饰哪种类型的ConcreteComponent，从而对其进行装饰。
+优点：装饰类和被装饰类可以独立发展，不会相互耦合，装饰模式是继承的一个替代模式，装饰模式可以动态扩展一个实现类的功能。
+缺点：多层装饰比较复杂。
+看下简单的代码是如何实现的
+//基础接口
+public interface Component {
+    
+    public void biu();
+}
+//具体实现类
+public class ConcretComponent implements Component {
+
+    public void biu() {
+        
+        System.out.println("biubiubiu");
+    }
+}
+//装饰类
+public class Decorator implements Component {
+
+    public Component component;
+    
+    public Decorator(Component component) {
+        
+        this.component = component;
+    }
+    
+    public void biu() {
+        
+        this.component.biu();
+    }
+}
+//具体装饰类
+public class ConcreteDecorator extends Decorator {
+
+    public ConcreteDecorator(Component component) {
+
+        super(component);
+    }
+
+    public void biu() {
+        
+        System.out.println("ready?go!");
+        this.component.biu();
+    }
+}
+　//使用装饰器
+　　Component component = new ConcreteDecorator(new ConcretComponent());
+　　component.biu();
+
+　　//console：
+　　ready?go!
+　　biubiubiu
+这样一个基本的装饰器体系就出来了，当我们想让Component在打印之前都有一ready？go！的提示时，就可以使用ConcreteDecorator类了。
+通过这个例子思考一下运用装饰器模型的意义：首先，装饰器的价值在于装饰，他并不影响装饰类本身的核心功能。在一个继承的体系中，子类功能是互斥的。比如一辆车，品牌只能要么是奥迪、要么是宝马，不可能同时属于奥迪和宝马，而品牌也是一辆车本身的重要属性特征。但当你想要给汽车喷漆，换坐垫，或者更换音响时，这些功能是互相可能兼容的，并且他们的存在不会影响车的核心属性：那就是他是一辆什么车。这时你就可以定义一个装饰器：喷了漆的车。不管他装饰的车是宝马还是奥迪，他的喷漆效果都可以实现。
+再回到这个例子中，我们看到的仅仅是一个ConcreteComponent类。在复杂的大型项目中，同一级下的兄弟类通常有很多。当你有五个甚至十个ConcreteComponent时，再想要为每个类都加上“ready？go！”的效果，就要写出五个子类了。毫无疑问这是不合理的。装饰器模式在不影响各个ConcreteComponent核心价值的同时，添加了他特有的装饰效果，具备非常好的通用性，这也是他存在的最大价值。
+三．迭代器模式
+定义：提供一种方法访问一个容器对象中各个元素，而又不暴露该对象的内部细节。
+优点：1、它支持以不同的方式遍历一个聚合对象。 2、迭代器简化了聚合类。 3、在同一个聚合上可以有多个遍历。 4、在迭代器模式中，增加新的聚合类和迭代器类都很方便，无须修改原有代码。
+缺点：由于迭代器模式将存储数据和遍历数据的职责分离，增加新的聚合类需要对应增加新的迭代器类，类的个数成对增加，这在一定程度上增加了系统的复杂性。
+而且迭代器模式是在java开发的过程中使用最多的一种模式。
+迭代器的模式结构：
+抽象容器：一般是一个接口，提供一个iterator()方法，例如java中的Collection接口，List接口，Set接口等。
+具体容器：就是抽象容器的具体实现类，比如List接口的有序列表实现ArrayList，List接口的链表实现LinkList，Set接口的哈希列表的实现HashSet等。
+抽象迭代器：定义遍历元素所需要的方法，一般来说会有这么三个方法：取得第一个元素的方法first()，取得下一个元素的方法next()，判断是否遍历结束的方法isDone()（或者叫hasNext()），移出当前对象的方法remove(),
+迭代器实现：实现迭代器接口中定义的方法，完成集合的迭代。
+类图： 
+代码实现：interface Iterator {
+	public Object next();
+	public boolean hasNext();
+}
+class ConcreteIterator implements Iterator{
+	private List list = new ArrayList();
+	private int cursor =0;
+	public ConcreteIterator(List list){
+		this.list = list;
+	}
+	public boolean hasNext() {
+		if(cursor==list.size()){
+			return false;
+		}
+		return true;
+	}
+	public Object next() {
+		Object obj = null;
+		if(this.hasNext()){
+			obj = this.list.get(cursor++);
+		}
+		return obj;
+	}
+}
+interface Aggregate {
+	public void add(Object obj);
+	public void remove(Object obj);
+	public Iterator iterator();
+}
+class ConcreteAggregate implements Aggregate {
+	private List list = new ArrayList();
+	public void add(Object obj) {
+		list.add(obj);
+	}
+ 
+	public Iterator iterator() {
+		return new ConcreteIterator(list);
+	}
+ 
+	public void remove(Object obj) {
+		list.remove(obj);
+	}
+}
+public class Client {
+	public static void main(String[] args){
+		Aggregate ag = new ConcreteAggregate();
+		ag.add("小明");
+		ag.add("小红");
+		ag.add("小刚");
+		Iterator it = ag.iterator();
+		while(it.hasNext()){
+			String str = (String)it.next();
+			System.out.println(str);
+		}
+	}
+}
+四．数据访问对象模式
+数据访问对象模式或DAO模式将数据访问API与高级业务服务分离。
+DAO模式通常具有以下接口和类。
+数据访问对象接口定义模型对象的标准操作。
+数据访问对象类实现以上接口。可能有多个实现，例如，一个用于数据库，一个用于文件。
+模型对象简单的POJO包含get/set方法来存储数据。
+import java.util.ArrayList;
+import java.util.List;
+ 
+class Employee {
+  private String name;
+  private int id;
+ 
+  Employee(String name, int id) {
+    this.name = name;
+    this.id = id;
+  }
+ 
+  public String getName() {
+    return name;
+  }
+ 
+  public void setName(String name) {
+    this.name = name;
+  }
+ 
+  public int getId() {
+    return id;
+  }
+ 
+  public void setId(int id) {
+    this.id = id;
+  }
+}
+ 
+interface EmployeeDao {
+  public List<Employee> getAll();
+ 
+  public Employee get(int id);
+ 
+  public void updateStudent(Employee student);
+ 
+  public void delete(Employee student);
+}
+ 
+class EmployeeDaoImpl implements EmployeeDao {
+  List<Employee> employeeList;
+ 
+  public EmployeeDaoImpl() {
+    employeeList = new ArrayList<Employee>();
+    Employee emp1 = new Employee("Jack", 0);
+    Employee emp2 = new Employee("Tom", 1);
+    employeeList.add(emp1);
+    employeeList.add(emp2);
+  }
+ 
+  @Override
+  public void delete(Employee student) {
+    employeeList.remove(student.getId());
+    System.out.println("Employee: No " + student.getId()
+        + ", deleted from database");
+  }
+ 
+  @Override
+  public List<Employee> getAll() {
+    return employeeList;
+  }
+ 
+  @Override
+  public Employee get(int rollNo) {
+    return employeeList.get(rollNo);
+  }
+ 
+  @Override
+  public void updateStudent(Employee emp) {
+    employeeList.get(emp.getId()).setName(emp.getName());
+    System.out.println("Emp:No " + emp.getId()
+        + ", updated in the database");
+  }
+}
+ 
+public class Main {
+  public static void main(String[] args) {
+    EmployeeDao empDao = new EmployeeDaoImpl();
+    for (Employee emp : empDao.getAll()) {
+      System.out.println("Emp: [No : " + emp.getId() + ", Name : "
+          + emp.getName() + " ]");
+    }
+    Employee emp = empDao.getAll().get(0);
+    emp.setName("Jane");
+    empDao.updateStudent(emp);
+ 
+    empDao.get(0);
+    System.out.println("Emp: [No : " + emp.getId() + ", Name : "
+        + emp.getName() + " ]");
+总结：通过对设计模式的了解和学习，也重温了许多之前学过的java知识。但更多的是学到了一种设计的理念，在以往看代码的过程中可能不会思考这么多。但在这次自我学习的过程中，当自己去细看这些代码的时候，发现这些设计模式真的是有他们存在的道理，是十分的巧妙！
+浅谈设计模式
+软件设计在项目开发的过程中越来越起到重要的作用。在我们学习开发的过程中，也逐步能够发现框架在软件开发过程中的便捷性，在我看来框架的开发是设计模式的一种体现。在写代码的过程中我们也能够发现构建一个优秀的系统最困难之处不在于编码（coding），而是在早期做出的设计（design）上的决定。设计是软件开发生命周期中的关键阶段，好的设计能产生好的产品，而不当的设计则会影响最终产品的质量。
+  设计模式的作用：
+1.	设计模式以一种标准的方式供广大开发人员使用，为开发者的沟通提供了一套机制，帮助开发者更好地明白和更清晰地描述一段被给出的代码。
+2.	设计模式可以使人们更加方便简单的复用成功的设计模式和结构
+3.	设计模式可以使人们深入理解面向对象的设计思想，提高软件的开发效率，节约设计成本。
+设计模式又能够分成创建型设计模式，结构设计模式，行为型模式。
+此报告就浅谈一下四个经典的设计模式：工厂模式，装饰器模式，迭代器模式，数据访问对象模式。
+一．工厂模式
+工厂模式是java开发中最常用的设计模式之一，也是我们最常用的实例化对象模式了，是用工厂方法代替new操作的一种模式。
+意图：定义了一个创建对象的接口，让其子类自己决定实例化哪一个工厂类，工厂模式使其创建过程延迟到子类进行，解决了接口选择的问题。
+何时使用：我们明确地计划不同条件下创建不同实例时。
+如何解决：让其子类实现工厂接口，返回的也是一个抽象的产品。
+关键代码：创建过程在其子类执行。
+应用实例：您需要一辆汽车，可以直接从工厂里面提货，而不用去管这辆汽车是怎么做出来的，以及这个汽车里面的具体实现。
+优点：1.一个调用者想创建一个对象，只要知道名称就可以。2.扩展性提高，如果想增加一个产品，只要扩展一个工厂类就可以。3.屏蔽产品的具体实现，调用者只关心产品的接口。
+缺点：每次增加一个产品时，都需要增加一个具体类和对象实现工厂，使得系统中类的个数成倍增加，在一定程度上增加了系统的复杂度，同时也增加了系统具体类的依赖。
+下面来看一下代码的具体例子。
+我喜欢吃面条，抽象一个面条基类，（接口也可以），这是产品的抽象类。
+public abstract class INoodles {
+    /**
+     * 描述每种面条啥样的
+     */
+    public abstract void desc();
+}
+先来一份兰州拉面（具体产品类）
+public class LzNoodles extends INoodles {
+    @Override
+    public void desc() {
+        System.out.println("兰州拉面 上海的好贵 家里才5 6块钱一碗");
+    }
+}
+程序员加班必备也要吃泡面（具体的产品类）：
+public class PaoNoodles extends INoodles {
+    @Override
+    public void desc() {
+        System.out.println("泡面好吃 可不要贪杯");
+    }
+}
+准备工作做完了，我们来到一家“简单面馆”（简单工厂类），菜单如下：
+public class SimpleNoodlesFactory {
+    public static final int TYPE_LZ = 1;//兰州拉面
+    public static final int TYPE_PM = 2;//泡面
+    public static final int TYPE_GK = 3;//干扣面
+
+    public static INoodles createNoodles(int type) {
+        switch (type) {
+            case TYPE_LZ:
+                return new LzNoodles();
+            case TYPE_PM:
+                return new PaoNoodles();
+            case TYPE_GK:
+            default:
+                return new GankouNoodles();
+        }
+    }
+}
+简单面馆就提供三种面条（产品），你说要啥，他就给你啥。这里我点了一份干扣面
+INoodles noodles = SimpleNoodlesFactory.createNoodles(SimpleNoodlesFactory.TYPE_GK);
+ noodles.desc();
+输出：还是家里的干扣面好吃 6块一碗
+在学习和了解工厂模式之后有了自己一点的理解：工厂模式把创建和使用的过程分开来了。工厂模式可以降低代码重复。如果创建对象的过程都很复杂，需要一定的代码量，而且很多地方都要用到，那么就会有很多的重复代码。我们可以这些创建对象的代码放到工厂里统一管理。既减少了重复代码，也方便以后的创建过程的修改维护。另外，因为工厂管理了对象的创建逻辑，使用者并不需要知道具体的创建过程，只管使用即可，减少了使用者因为创建逻辑导致的错误。
+二．装饰器模式
+  装饰器模式是为已有功能动态的添加更多功能的一种方式，同时又改变其结构。这种模式创建了一个装饰类，用来包装所有的类，并在保存类方法签名的完整性的前提下，提供了额外的功能。
+  其结构图如下：
+ 
+Component为统一接口，也是装饰类和被装饰类的基本类型。
+ConcreteComponent为具体实现类，也是被装饰类，他本身是个具有一些功能的完整的类。
+Decorator是装饰类，实现了Component接口的同时还在内部维护了一ConcreteComponent的实例，并可以通过构造函数初始化。而Decorator本身，通常采用默认实现，他的存在仅仅是一个声明：我要生产出一些用于装饰的子类了。而其子类才是赋有具体装饰效果的装饰产品类。
+ConcreteDecorator是具体的装饰产品类，每一种装饰产品都具有特定的装饰效果。可以通过构造器声明装饰哪种类型的ConcreteComponent，从而对其进行装饰。
+优点：装饰类和被装饰类可以独立发展，不会相互耦合，装饰模式是继承的一个替代模式，装饰模式可以动态扩展一个实现类的功能。
+缺点：多层装饰比较复杂。
+看下简单的代码是如何实现的
+//基础接口
+public interface Component {
+    
+    public void biu();
+}
+//具体实现类
+public class ConcretComponent implements Component {
+
+    public void biu() {
+        
+        System.out.println("biubiubiu");
+    }
+}
+//装饰类
+public class Decorator implements Component {
+
+    public Component component;
+    
+    public Decorator(Component component) {
+        
+        this.component = component;
+    }
+    
+    public void biu() {
+        
+        this.component.biu();
+    }
+}
+//具体装饰类
+public class ConcreteDecorator extends Decorator {
+
+    public ConcreteDecorator(Component component) {
+
+        super(component);
+    }
+
+    public void biu() {
+        
+        System.out.println("ready?go!");
+        this.component.biu();
+    }
+}
+　//使用装饰器
+　　Component component = new ConcreteDecorator(new ConcretComponent());
+　　component.biu();
+
+　　//console：
+　　ready?go!
+　　biubiubiu
+这样一个基本的装饰器体系就出来了，当我们想让Component在打印之前都有一ready？go！的提示时，就可以使用ConcreteDecorator类了。
+通过这个例子思考一下运用装饰器模型的意义：首先，装饰器的价值在于装饰，他并不影响装饰类本身的核心功能。在一个继承的体系中，子类功能是互斥的。比如一辆车，品牌只能要么是奥迪、要么是宝马，不可能同时属于奥迪和宝马，而品牌也是一辆车本身的重要属性特征。但当你想要给汽车喷漆，换坐垫，或者更换音响时，这些功能是互相可能兼容的，并且他们的存在不会影响车的核心属性：那就是他是一辆什么车。这时你就可以定义一个装饰器：喷了漆的车。不管他装饰的车是宝马还是奥迪，他的喷漆效果都可以实现。
+再回到这个例子中，我们看到的仅仅是一个ConcreteComponent类。在复杂的大型项目中，同一级下的兄弟类通常有很多。当你有五个甚至十个ConcreteComponent时，再想要为每个类都加上“ready？go！”的效果，就要写出五个子类了。毫无疑问这是不合理的。装饰器模式在不影响各个ConcreteComponent核心价值的同时，添加了他特有的装饰效果，具备非常好的通用性，这也是他存在的最大价值。
+三．迭代器模式
+定义：提供一种方法访问一个容器对象中各个元素，而又不暴露该对象的内部细节。
+优点：1、它支持以不同的方式遍历一个聚合对象。 2、迭代器简化了聚合类。 3、在同一个聚合上可以有多个遍历。 4、在迭代器模式中，增加新的聚合类和迭代器类都很方便，无须修改原有代码。
+缺点：由于迭代器模式将存储数据和遍历数据的职责分离，增加新的聚合类需要对应增加新的迭代器类，类的个数成对增加，这在一定程度上增加了系统的复杂性。
+而且迭代器模式是在java开发的过程中使用最多的一种模式。
+迭代器的模式结构：
+抽象容器：一般是一个接口，提供一个iterator()方法，例如java中的Collection接口，List接口，Set接口等。
+具体容器：就是抽象容器的具体实现类，比如List接口的有序列表实现ArrayList，List接口的链表实现LinkList，Set接口的哈希列表的实现HashSet等。
+抽象迭代器：定义遍历元素所需要的方法，一般来说会有这么三个方法：取得第一个元素的方法first()，取得下一个元素的方法next()，判断是否遍历结束的方法isDone()（或者叫hasNext()），移出当前对象的方法remove(),
+迭代器实现：实现迭代器接口中定义的方法，完成集合的迭代。
+类图： 
+代码实现：interface Iterator {
+	public Object next();
+	public boolean hasNext();
+}
+class ConcreteIterator implements Iterator{
+	private List list = new ArrayList();
+	private int cursor =0;
+	public ConcreteIterator(List list){
+		this.list = list;
+	}
+	public boolean hasNext() {
+		if(cursor==list.size()){
+			return false;
+		}
+		return true;
+	}
+	public Object next() {
+		Object obj = null;
+		if(this.hasNext()){
+			obj = this.list.get(cursor++);
+		}
+		return obj;
+	}
+}
+interface Aggregate {
+	public void add(Object obj);
+	public void remove(Object obj);
+	public Iterator iterator();
+}
+class ConcreteAggregate implements Aggregate {
+	private List list = new ArrayList();
+	public void add(Object obj) {
+		list.add(obj);
+	}
+ 
+	public Iterator iterator() {
+		return new ConcreteIterator(list);
+	}
+ 
+	public void remove(Object obj) {
+		list.remove(obj);
+	}
+}
+public class Client {
+	public static void main(String[] args){
+		Aggregate ag = new ConcreteAggregate();
+		ag.add("小明");
+		ag.add("小红");
+		ag.add("小刚");
+		Iterator it = ag.iterator();
+		while(it.hasNext()){
+			String str = (String)it.next();
+			System.out.println(str);
+		}
+	}
+}
+四．数据访问对象模式
+数据访问对象模式或DAO模式将数据访问API与高级业务服务分离。
+DAO模式通常具有以下接口和类。
+数据访问对象接口定义模型对象的标准操作。
+数据访问对象类实现以上接口。可能有多个实现，例如，一个用于数据库，一个用于文件。
+模型对象简单的POJO包含get/set方法来存储数据。
+import java.util.ArrayList;
+import java.util.List;
+ 
+class Employee {
+  private String name;
+  private int id;
+ 
+  Employee(String name, int id) {
+    this.name = name;
+    this.id = id;
+  }
+ 
+  public String getName() {
+    return name;
+  }
+ 
+  public void setName(String name) {
+    this.name = name;
+  }
+ 
+  public int getId() {
+    return id;
+  }
+ 
+  public void setId(int id) {
+    this.id = id;
+  }
+}
+ 
+interface EmployeeDao {
+  public List<Employee> getAll();
+ 
+  public Employee get(int id);
+ 
+  public void updateStudent(Employee student);
+ 
+  public void delete(Employee student);
+}
+ 
+class EmployeeDaoImpl implements EmployeeDao {
+  List<Employee> employeeList;
+ 
+  public EmployeeDaoImpl() {
+    employeeList = new ArrayList<Employee>();
+    Employee emp1 = new Employee("Jack", 0);
+    Employee emp2 = new Employee("Tom", 1);
+    employeeList.add(emp1);
+    employeeList.add(emp2);
+  }
+ 
+  @Override
+  public void delete(Employee student) {
+    employeeList.remove(student.getId());
+    System.out.println("Employee: No " + student.getId()
+        + ", deleted from database");
+  }
+ 
+  @Override
+  public List<Employee> getAll() {
+    return employeeList;
+  }
+ 
+  @Override
+  public Employee get(int rollNo) {
+    return employeeList.get(rollNo);
+  }
+ 
+  @Override
+  public void updateStudent(Employee emp) {
+    employeeList.get(emp.getId()).setName(emp.getName());
+    System.out.println("Emp:No " + emp.getId()
+        + ", updated in the database");
+  }
+}
+ 
+public class Main {
+  public static void main(String[] args) {
+    EmployeeDao empDao = new EmployeeDaoImpl();
+    for (Employee emp : empDao.getAll()) {
+      System.out.println("Emp: [No : " + emp.getId() + ", Name : "
+          + emp.getName() + " ]");
+    }
+    Employee emp = empDao.getAll().get(0);
+    emp.setName("Jane");
+    empDao.updateStudent(emp);
+ 
+    empDao.get(0);
+    System.out.println("Emp: [No : " + emp.getId() + ", Name : "
+        + emp.getName() + " ]");
+总结：通过对设计模式的了解和学习，也重温了许多之前学过的java知识。但更多的是学到了一种设计的理念，在以往看代码的过程中可能不会思考这么多。但在这次自我学习的过程中，当自己去细看这些代码的时候，发现这些设计模式真的是有他们存在的道理，是十分的巧妙！

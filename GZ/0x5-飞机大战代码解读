@@ -1,0 +1,536 @@
+# 这一部分只向大家介绍一下代码
+#### 1.player.cs
+*这部分是玩家的脚本，主要定义了玩家的属性，子弹的发射，玩家死亡、游戏结束的控制等。
+```
+using UnityEngine;
+using System.Collections;
+
+//[AddComponentMenu("MyGame/Player")]
+public class Player : MonoBehaviour {
+   //player移动速度10
+    public float m_speed = 10;
+
+    //player初始生命3条
+    public float m_life = 3;
+
+    // 定义子弹的prefab
+    public Transform m_rocket;
+    //子弹来源，使用transform组件
+    protected Transform m_transform;
+    //定义子弹的初始频率为0，后面会对其改变。
+    float m_rocketRate = 0;
+
+    // 定义射击声音
+    public AudioClip m_shootClip;
+
+    // 声音来源，使用audio组件
+    protected AudioSource m_audio;
+
+    // 爆炸效果
+    public Transform m_explosionFX;
+
+    // Ŀ��λ��
+    //  protected Vector3 m_targetPos;
+
+    // ���������ײ��
+    // public LayerMask m_inputMask;
+    //float movev=0;
+
+    //float moveh=0;
+
+    // Use this for initialization
+    //初始化函数
+    void Start () {
+        //调用
+        m_transform = this.transform;
+        //调用
+        m_audio = this.GetComponent<AudioSource>();
+
+     //   m_targetPos = this.m_transform.position;
+	}
+	
+	// Update is called once per frame
+    // 控制player移动
+	void Update () {
+
+        //上移
+		if (Input.GetKey(KeyCode.UpArrow)) {
+			//movev -= m_speed * Time.deltaTime;
+			transform.Translate(Vector3.back * Time.deltaTime*m_speed);
+		}
+        //下移
+		if(Input.GetKey(KeyCode.DownArrow)){
+        
+           // movev += m_speed * Time.deltaTime;
+			transform.Translate(Vector3.forward * Time.deltaTime*m_speed);
+        }
+        //左移
+		if(Input.GetKey(KeyCode.LeftArrow)){
+			transform.Translate(Vector3.right * Time.deltaTime*m_speed);
+        
+           // moveh += m_speed * Time.deltaTime;
+        }
+
+        // 右移
+        if ( Input.GetKey( KeyCode.RightArrow ) )
+        {
+            //moveh -= m_speed * Time.deltaTime;
+			transform.Translate(Vector3.left * Time.deltaTime*m_speed);
+        }
+
+        m_rocketRate -= Time.deltaTime;
+        //子弹发射频率判断
+        if ( m_rocketRate <= 0 )
+        {
+            //控制频率上限
+            m_rocketRate = 0.1f;
+            //空格键或者鼠标点击
+            if ( Input.GetKey( KeyCode.Space ) || Input.GetMouseButton(0) )
+            {
+                //预设物名字，位置，旋转角度
+                Instantiate( m_rocket, m_transform.position, m_transform.rotation );
+
+                // 子弹发射时候的声音
+                m_audio.PlayOneShot(m_shootClip);
+            }
+        }
+       
+
+	}
+    //当player生命值为0时候游戏结束
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag.CompareTo("PlayerRocket") != 0)
+        {
+            m_life -= 1;
+
+            if (m_life <= 0) 
+            {
+                //爆炸特效
+                Instantiate(m_explosionFX, m_transform.position, Quaternion.identity);
+                //游戏结束
+                Destroy(this.gameObject);
+            }
+        }
+    }
+
+   }
+
+
+}
+```
+#### 2.Enemy.cs
+* 这是敌人的脚本，定义了敌机的属性，敌机的移动，与子弹的碰撞检测，血量的扣除，爆炸效果的添加等
+```
+using UnityEngine;
+using System.Collections;
+
+[AddComponentMenu("MyGame/Enemy")]
+public class Enemy : MonoBehaviour {
+
+    // 速度
+    public float m_speed = 1;
+
+    // 生命
+    public float m_life = 10;
+
+    // 旋转速度
+    //  protected float m_rotSpeed = 30;
+    //使用transform组件
+    protected Transform m_transform;
+    // 爆炸效果
+    public Transform m_explosionFX;
+    //定义分值
+    public int m_point = 10;
+
+    // Use this for initialization
+    // 初始化函数
+    void Start () {
+        //调用
+        m_transform = this.transform;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+
+        UpdateMove();
+	}
+
+    protected virtual void UpdateMove()
+    {
+        // 左右随机移动
+        float rx = Mathf.Sin(Time.time) * Time.deltaTime;
+
+        // 前进
+        m_transform.Translate(new Vector3(rx, 0, -m_speed * Time.deltaTime));
+    }
+    //碰撞的检测与扣血
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag.CompareTo("PlayerRocket") == 0)
+        {
+            Rocket rocket = other.GetComponent<Rocket>();
+            if (rocket != null)
+            {
+                m_life -= rocket.m_power;
+
+                if (m_life <= 0)
+                {
+                    GameManager.Instance.AddScore(m_point);
+
+                    Instantiate(m_explosionFX, m_transform.position, Quaternion.identity);
+                    Destroy(this.gameObject);
+                }
+            }
+        }
+        else if (other.tag.CompareTo("Player") == 0)
+        {
+            m_life = 0;
+            //摧毁特效
+            Instantiate(m_explosionFX, m_transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+        }
+        //物体消失
+        if (other.tag.CompareTo("bound") == 0)
+        {
+            m_life = 0;
+            Destroy(this.gameObject);
+        }
+    }
+}
+
+```
+#### 3.EnemyROcket.cs
+* 这是敌军子弹，继承了子弹的效果外加上于player碰撞的部分。
+```
+using UnityEngine;
+using System.Collections;
+
+[AddComponentMenu("MyGame/EnemyRocket")]
+public class EnemyRocket : Rocket
+{
+    //与player碰撞并撞毁
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag.CompareTo("Player") != 0)
+            return;
+
+        Destroy(this.gameObject);
+    }
+}
+
+```
+#### 4.EnemySpawn.cs
+* 这是敌军生成的地方，控制敌机生成的时间间隔等
+```
+using UnityEngine;
+using System.Collections;
+
+[AddComponentMenu("MyGame/EnemySpawn")]
+public class EnemySpawn : MonoBehaviour
+{
+    // 敌人的Prefab
+    public Transform m_enemy;
+
+    // 生成敌人的时间间隔
+    protected float m_timer = 5;
+    //使用transform组件
+    protected Transform m_transform;
+
+    // Use this for initialization
+    //初始化函数，
+    void Start () {
+        //调用
+        m_transform = this.transform;
+	}
+	
+	// Update is called once per frame
+	void Update () {
+
+        m_timer -= Time.deltaTime;
+        if (m_timer <= 0)
+        {
+            m_timer = Random.value * 15.0f;
+            if (m_timer < 5)
+                m_timer = 5;
+            //Quaternion.identity使得飞行朝向不变
+            Instantiate(m_enemy, m_transform.position, Quaternion.identity);
+        }
+	}
+
+    void  OnDrawGizmos () 
+    {
+        Gizmos.DrawIcon (transform.position, "item.png", true);
+    }
+
+}
+```
+#### 5.GameManager.cs
+* 这个游戏最重要的部分。相当于main函数。
+```
+using UnityEngine;
+using System.Collections;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+[AddComponentMenu("MyGame/GameManager")]
+public class GameManager : MonoBehaviour {
+
+    public static GameManager Instance;
+
+    //得分
+    public int m_score = 0;
+
+    //纪录
+    public static int m_hiscore = 0;
+	//add later:
+	[SerializeField] private Text m_ScoreTxt;
+	[SerializeField] private Text m_HisoreTxt;
+
+    //主角
+    protected Player m_player;
+
+    // 背景音乐
+    public AudioClip m_musicClip;
+
+    // 声音源
+    protected AudioSource m_Audio;
+    //初始化函数，在游戏开始时系统自动调用。一般用来创建变量之类的东西。
+    void Awake()
+    {
+        Instance = this;
+    }
+
+    // Use this for initialization
+    //初始化函数，在所有Awake函数运行完之后（一般是这样，但不一定），在所有Update函数前系统自动条用。一般用来给变量赋值。
+    // 我们通常书写的脚本，并不会定义[ExecuteInEditMode]这个Attribute，所以Awake和Start都只有在Runtime中才会执行,
+	void Start () {
+
+        m_Audio = this.GetComponent<AudioSource>();
+
+        // 获取主角
+        GameObject obj = GameObject.FindGameObjectWithTag("Player");
+        if (obj != null)
+        {
+            m_player = obj.GetComponent<Player>();
+        }
+	
+	}
+	
+	// Update is called once per frame
+	void Update () {
+
+        // 循环播放背景音乐
+        if (!m_Audio.isPlaying)
+        {
+            m_Audio.clip = m_musicClip;
+            m_Audio.Play();
+           
+        }
+
+        // 暂停游戏
+        if (Time.timeScale > 0 && Input.GetKeyDown(KeyCode.Escape))
+        {
+            Time.timeScale = 0;
+        }
+		m_ScoreTxt.text = "Score:<color=yellow><b>"+ m_score  +" </b></color>";
+		m_HisoreTxt.text = "Score:<color=yellow><b>"+ m_hiscore  +" </b></color>";
+	}
+
+    void OnGUI()
+    {
+        // 游戏暂停
+        if (Time.timeScale == 0)
+        {
+            // 继续游戏按钮
+            if (GUI.Button(new Rect(Screen.width * 0.5f - 50, Screen.height * 0.4f, 100, 30), "Continue Game"))
+            {
+                Time.timeScale = 1;
+            }
+
+            // 退出游戏按钮
+            if (GUI.Button(new Rect(Screen.width * 0.5f - 50, Screen.height * 0.6f, 100, 30), "Game Exit"))
+            {
+                // 退出游戏
+                Application.Quit();
+            }
+        }
+        
+        int life = 0;
+        if (m_player != null)
+        {
+            // 获得主角的生命值
+            life = (int)m_player.m_life;
+        }
+        else // game over
+        {
+            
+            // 放大字体
+            GUI.skin.label.fontSize = 50;
+
+            // 显示游戏失败
+            GUI.skin.label.alignment = TextAnchor.LowerCenter;
+            GUI.Label(new Rect(0, Screen.height * 0.2f, Screen.width, 60), "Game Failure");
+
+            GUI.skin.label.fontSize = 20;
+
+            // 显示按钮
+            if (GUI.Button(new Rect(Screen.width * 0.5f - 50, Screen.height * 0.5f, 100, 30), "Try again"))
+            {
+                // 读取当前关卡
+				SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+               // Application.LoadLevel(Application.loadedLevelName);
+            }
+        }
+
+        GUI.skin.label.fontSize = 15;
+
+        // 显示主角生命
+        GUI.Label(new Rect(5, 5, 100, 30), "PlayerLife " + life);
+
+        // 显示最高分
+        GUI.skin.label.alignment = TextAnchor.LowerCenter;
+        GUI.Label(new Rect(0, 5, Screen.width, 30), "Record: " + m_hiscore);
+
+        // 显示当前得分
+        GUI.Label(new Rect(0, 25, Screen.width, 30), "Score: " + m_score);
+
+    }
+
+    // 增加分数
+    public void AddScore( int point )
+    {
+        m_score += point;
+
+
+
+        // 更新高分纪录
+        if (m_hiscore < m_score)
+            m_hiscore = m_score;
+		
+    }
+}
+
+```
+#### 6.Rocket.cs
+* 这是子弹的脚本，定义了子弹的各种属性，及碰撞判断。
+```
+using UnityEngine;
+using System.Collections;
+
+[AddComponentMenu("MyGame/Rocket")]
+public class Rocket : MonoBehaviour {
+
+    // 子弹飞行速度
+    public float m_speed = 10;
+
+    // 生存时间
+    public float m_liveTime = 1;
+
+    // 威力
+    public float m_power = 1.0f;
+    //子弹来源，使用transform组件
+    protected Transform m_trasform;
+
+    // Use this for initialization
+    //初始化函数
+    void Start () {
+        //调用
+        m_trasform = this.transform;
+        //生存时间满了即消失
+        Destroy(this.gameObject, m_liveTime);
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        //Time.deltaTime表示上帧到本帧所用时间，-m_speed * Time.deltaTime表示这一帧变化的位移
+        m_trasform.Translate( new Vector3( 0, 0, -m_speed * Time.deltaTime ) );
+	}
+    //碰撞判断
+    void OnTriggerEnter(Collider other)
+    {
+        //遇到tag是Enemy的物体，子弹将会消失
+        if (other.tag.CompareTo("Enemy")!=0)
+            return;
+
+        Destroy(this.gameObject);
+    }
+}
+```
+#### 7.SuperEnemy.cs
+* 继承Enemy,但是多了给发射子弹部分，相当于Enemy的升级版。
+```
+using UnityEngine;
+using System.Collections;
+
+[AddComponentMenu("MyGame/Rocket")]
+public class Rocket : MonoBehaviour {
+
+    // 子弹飞行速度
+    public float m_speed = 10;
+
+    // 生存时间
+    public float m_liveTime = 1;
+
+    // 威力
+    public float m_power = 1.0f;
+    //子弹来源，使用transform组件
+    protected Transform m_trasform;
+
+    // Use this for initialization
+    //初始化函数
+    void Start () {
+        //调用
+        m_trasform = this.transform;
+        //生存时间满了即消失
+        Destroy(this.gameObject, m_liveTime);
+	}
+	
+	// Update is called once per frame
+	void Update () {
+        //Time.deltaTime表示上帧到本帧所用时间，-m_speed * Time.deltaTime表示这一帧变化的位移
+        m_trasform.Translate( new Vector3( 0, 0, -m_speed * Time.deltaTime ) );
+	}
+    //碰撞判断
+    void OnTriggerEnter(Collider other)
+    {
+        //遇到tag是Enemy的物体，子弹将会消失
+        if (other.tag.CompareTo("Enemy")!=0)
+            return;
+
+        Destroy(this.gameObject);
+    }
+}
+```
+#### 8.TitleScreen.cs
+* 这部分显示这局比赛的得分，历史的最高得分，游戏标题，及下一关的读取等
+```
+using UnityEngine;
+using System.Collections;
+
+[AddComponentMenu("MyGame/TitleScreen")]
+public class TitleScreen : MonoBehaviour
+{
+
+    void OnGUI()
+    {
+        // 文字大小
+        GUI.skin.label.fontSize = 48;
+
+        // UI中心对齐
+        GUI.skin.label.alignment = TextAnchor.LowerCenter;
+
+        // 显示标题
+        GUI.Label(new Rect(0, 30, Screen.width, 100), "SpaceWar");
+
+
+        // 开始游戏按钮
+        if (GUI.Button(new Rect(Screen.width * 0.5f - 100, Screen.height * 0.7f, 200, 30), "Game Start"))
+        {
+            // 开始读取下一关
+            Application.LoadLevel("level1");
+        }
+    }
+}
+```
+
