@@ -1,0 +1,79 @@
+#### 十三周学习内容
+
+##### 抽象的基本概念
+
+一个父类设计得非常抽象，以至于它都没有任何具体的实例。这样的类称之为抽象类。抽象类不可以用于创造对象。
+
+抽象类的构造方法定义为protected，因为它只能被子类使用。
+
+在继承自抽象类的非抽象子类中，必须实现所有的抽象方法。还要注意到，抽象方法是非静态的。
+
+即使子类的父类是具体的，这个子类也可以是抽象的。
+
+##### 接口的基本概念
+
+接口是一种与类相似的结构，用于为对象定义共同的操作。不可以用于创造对象。
+
+```java
+public interface Edible{
+    public abstract String howToEat{};
+}
+```
+
+由于接口中所有的数据城都是public static final而且所有的方法都是public abstract，所以 Java 允许忽略这些修饰符。
+
+```java
+public interface T{
+    public static final int K = 1;
+    public abstract void p();
+} 
+```
+
+等价于
+
+```java
+public abstract {
+    int K=1；
+    void p();
+}
+```
+
+尽管 public修饰符对于定义在接口中的方法可以省略掉，但是在子类实现时方法必须定
+义为public的。
+
+##### Comparable接口
+
+Comparable接口定义了compareTo方法，用于比较对象。
+
+```java
+//Interface for comparing objects, defined in java.lang
+package java.lang; 
+public interface Comparable<E> {
+    public int compareTo(E o);
+} 
+```
+
+compareTo方法判断这个对象相对于给定对象o的顺序，并且当这个对象小于、等于或大于给定对象o时，分别返回负整数、0或正整数。 
+
+```java
+public class ComparableRectangle extends Rectangle
+implements Comparable<ComparableRectangle>{
+     /**Construct a ComparableRectangle with specified properties*/
+     public ComparableRectangle(double width, double height) {
+           super(width, height);
+      }
+      @Override // Implement the compareTo method defined in Comparable
+      public int compareTo(ComparableRectangle o) {
+           if (getArea()>o.getArea())
+           return 1;
+           else if (getArea()< o.getArea())
+           return -1;
+           else return 0;
+      }
+      @Override //Implement the toString method in GeometricObject
+      public String toString() {
+            return super.toString() +" Area: " + getArea();
+      }
+}
+```
+
