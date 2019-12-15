@@ -1,0 +1,127 @@
+# 随机地图的生成
+* 在一些游戏的开发设计的时候，经常需要设计不同的地图来增加游戏的关卡。如果一个个的去设计每个关卡的地图，就会消耗开发者大量的时间，因此，在很多情况下设计好地图元素然后通过代码将这些元素进行随机排列达到一个随机地图的效果可以减少很多开发时间的。
+* 下面分享一个能够简单的实现地图随机生成的代码
+```
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class map : MonoBehaviour {
+	public GameObject[] tunelToSpawn;
+	public GameObject[] doorTOSpawn;
+
+	public GameObject[] monsterTOSpawn;
+	public GameObject[] NPCTOSpawn;
+
+	public Transform[] positionWall;
+
+	public Transform[] positionfloor;
+
+
+	// Use this for initialization
+	void Start () {
+		for(int i = 0;i <= positionWall.Length;i++){
+			mapGenerator ();
+		}
+
+		for(int x = 0;x <= positionfloor.Length;x++){
+			monsterGenerator ();
+		}
+
+
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+
+	public void mapGenerator(){
+		if (manage.RoomNumberCout < manage.RoomNumberLimits) {
+			int wallIndex = Random.Range (0, positionWall.Length);
+
+			int tunelIndex = Random.Range (0, tunelToSpawn.Length);
+			int doorIndex = Random.Range (0, doorTOSpawn.Length);
+
+			    Instantiate (doorTOSpawn [doorIndex], positionWall [wallIndex].position, positionWall [wallIndex].rotation);//生成door
+			    GameObject aclone = Instantiate (tunelToSpawn [tunelIndex], positionWall [wallIndex].position, positionWall [wallIndex].rotation);//生成tunel
+
+			    aclone.name = manage.n.ToString();
+			    manage.n = manage.n + 1;
+			  	Destroy (positionWall [wallIndex].gameObject);//删除与door重叠的wall
+
+				List<Transform> wallList = new List<Transform> (positionWall);//创建新的list储存wall
+				wallList.Remove (positionWall [wallIndex]);//将使用的wall从list中删除
+				positionWall = wallList.ToArray ();
+
+				manage.RoomNumberCout += 1;
+
+
+		}
+
+	}
+
+
+
+	public void monsterGenerator(){
+
+		if (manage.MonsterNumberCout < manage.MonsterNumberLimits) {
+
+			int floorIndex = Random.Range (0, positionfloor.Length);
+
+			int monsterIndex = Random.Range (0, monsterTOSpawn.Length);
+			int NPCIndex = Random.Range (0, NPCTOSpawn.Length);
+
+			int random;
+
+			//如果已存在NPC就只生成monster
+			if (manage.NPCNumberCout < manage.NPCNumberLimits) {
+				random = Random.Range (0, 2);
+			}else{
+				random = 1;
+			}
+
+
+			//生成monster或NPC
+			if (random != 0) {
+
+				Instantiate (monsterTOSpawn [monsterIndex], positionfloor [floorIndex].position, positionWall [floorIndex].rotation);//生成怪物
+
+				List<Transform> floorList = new List<Transform> (positionfloor);
+				floorList.Remove (positionfloor [floorIndex]);
+				positionfloor = floorList.ToArray ();
+
+				manage.MonsterNumberCout += 1;
+			} else {
+				Instantiate (NPCTOSpawn [NPCIndex], positionfloor [floorIndex].position, positionWall [floorIndex].rotation);//生成NPC
+
+				List<Transform> floorList = new List<Transform> (positionfloor);
+				floorList.Remove (positionfloor [floorIndex]);
+				positionfloor = floorList.ToArray ();
+
+				manage.NPCNumberCout += 1;
+			}
+
+		}
+
+	}
+
+
+
+
+
+
+	void OnTriggerEnter(Collider other){
+		//如果两个room互相碰撞，则删除后生成的room
+		if(other.tag =="roomperfab"){
+			int	num1 = int.Parse (this.gameObject.name);
+			int num2 = int.Parse (other.gameObject.name);
+			if (num1 > num2) {
+				Destroy (this.gameObject);
+			}
+		}
+
+	}
+
+}
+```
