@@ -1,0 +1,201 @@
+##### 
+
+##### Java API
+
+###### 利用Java API实现文件操作
+
+不是所有的计算机都需要文件系统。没有提供插入U盘功能的没有文件系统，比如：智能电饭煲，手表。
+
+在Java书上提到的I/O系统：有底层文件系统支撑。
+
+###### 文件分为两类：
+
+二进制文件：图形文件及文字处理程序等[计算机程序](https://baike.baidu.com/item/计算机程序/3220205)都属于二进制文件.任何可运行应用程序：扫雷
+
+资源文件：XXX.jpg
+
+非二进制文件（字符文件）：可以用任何文字处理程序阅读的简单文本文件。源文件（如XXX.java）
+
+#### 文件操作（运用Java工程师提供的java类）
+
+https://www.cnblogs.com/peng19920430/p/11312449.html
+
+###### 创建文件夹
+
+###### 创建文件
+
+###### 在文件里写东西
+
+###### 存储文件
+
+```java
+public class FileWriterTest {
+    public static void main(String[] args) throws IOException {
+        File file=new File("C:\\Users\\lenovo\\Desktop\\Test\\hello.txt");
+        //FileWriter fw=new FileWriter(file);覆盖原来的内容
+        FileWriter fw=new FileWriter(file,true);//在原来的基础上增加
+        String s="你是天边最美的云彩。";
+        fw.write(s);
+        fw.close();
+    }
+}
+
+```
+
+```java
+public class FileReaderTest {
+    public static void main(String[] args) throws IOException  {
+        FileReader fr=new FileReader("C:\\Users\\lenovo\\Desktop\\Test\\hello.txt");
+        char[] buf=new char[256];
+        int len;
+        while ((len=fr.read(buf))!=-1){//读来的是不是有效数据
+            for(char c:buf)
+                System.out.print(c);
+        }
+        fr.close();
+    }
+}
+```
+
+```java
+public class BufferedReaderTest {
+    /*public static void main(String[] args) throws IOException {
+        FileReader fr=new FileReader("F:\\IDEAworkspace\\lesson13\\src\\lesson13\\BufferedReaderTest.java");
+        BufferedReader br=new BufferedReader(fr);
+        String s;
+        while ((s=br.readLine())!=null) {
+            System.out.println(s);
+        }
+        fr.close();
+    }*/
+    public static void main(String[] args) throws IOException {
+        FileReader fr = new FileReader("F:\\IDEAworkspace\\lesson13\\src\\lesson13\\BufferedReaderTest.java");
+        BufferedReader br = new BufferedReader(fr);
+        String s;
+        while ((s = br.readLine()) != null) {
+            System.out.println(s);
+        }
+        FileWriter fw=new FileWriter("F:\\IDEAworkspace\\lesson13\\src\\lesson13\\BufferedReaderTest.java");
+        BufferedWriter bw=new BufferedWriter(fw);
+        bw.write(s);
+        bw.newLine();
+        fw.close();
+
+        fr.close();
+    }
+}
+```
+
+
+
+```java
+public class FileTest {
+    public static void main(String[] args)throws IOException {
+        File f;
+        f =new File("C:\\Users\\lenovo\\Desktop\\Test");//用字符串创建对象时，有某种语义的字符串，根据具体写法要求来编写字符串
+        System.out.println(f.exists());
+        //canExecute():可执行
+        //f.lastModified():最后一次修改时间
+        //f.listFiles():当前文件夹中有多少文件
+        //f.mkdir():创建文件夹
+        f.mkdir();
+        //f.mkdirs():创建嵌套的文件夹
+
+        /*File f2=new File("C:/Users/lenovo/Desktop","a/b/c/d/e");
+        File f2=new File("C:\\Users\\lenovo\\Desktop","a\\b\\c\\d\\e");
+        两者效果相同，前者可以运行在所有系统上，后者只能在Windows系统上使用*/
+        File f2=new File("C:/Users/lenovo/Desktop","a/b/c/d/e");
+        f2.mkdirs();
+        System.out.println(f.isDirectory()+" : "+f2.isDirectory());//是否是文件夹
+        System.out.println(f.isFile()+" : "+f2.isFile());//是否是文件
+
+        /*File f3 =new File(f,"hello");
+        System.out.println(f3.isFile());结果为false
+        File f3 =new File(f,"hello.txt");//计算机是依靠扩展名来判断文件是文件夹还是文件
+        System.out.println(f3.isFile());结果为true*/
+        //File f3 =new File(f,"hello.txt");//计算机是依靠扩展名来判断文件是文件夹还是文件
+        //System.out.println(f3.isFile());
+        //File f4 =new File(f,"hello.world");//计算机是依靠扩展名而不是是不是有没有"."// 来判断文件是文件夹还是文件
+        //System.out.println(f4.isFile()+" "+f4.isDirectory());
+
+        //f.delete();//当前文件夹为空时，可以删除，当前文件夹为非空时，无法使用该操作来删除文件夹
+
+        File f3=new File(f,"hello.txt");
+        f3.createNewFile();
+
+        System.out.println("Game over");
+    }
+}
+```
+
+
+
+##### 字节流与字符流
+
+字节流：一个字节一个字节传输（最基础）
+
+字符流
+
+#### File inputStream
+
+#### File outputStream
+
+```java
+package Java1218Test;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
+public class FISFOS {
+    public static void main(String[] args) {
+        FileOutputStream fos=null;
+        try {
+            fos =new FileOutputStream("d:/Test/info.txt");
+            fos.write(10);
+            fos.write(100);
+            fos.write(1000);
+            fos.write(10000);
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        FileInputStream fis=null;
+        try {
+            fis=new FileInputStream("d:/Test/info.txt");
+            int x=fis.read();
+            System.out.println("x="+x);
+            x=fis.read();
+            System.out.println("x="+x);
+            x=fis.read();
+            System.out.println("x="+x);
+            x=fis.read();
+            System.out.println("x="+x);
+            x=fis.read();
+            System.out.println("x="+x);
+            fis.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("gameover");
+    }
+}
+```
+
+```java
+//结果
+x=10
+x=100
+x=232
+x=16
+x=-1
+```
+
+FileoutputStream与FileinputStream是一个字节一个字节来进行读写操作的。
+
+字符文件是字节文件的特例。
