@@ -1,0 +1,185 @@
+#### 泛型
+
+https://blog.csdn.net/s10461/article/details/53941091
+
+类型参数化：传递的是类型
+
+解决问题：尽早发现编译时发生的因类型发生的异常，增加稳定性。
+
+泛型类
+
+泛型方法  
+
+```java
+public class ArrayListTest {
+    public static void main(String[] args) {
+        List<String> list=new ArrayList<String>();//使用Java工程师使用的泛型类
+        list.add("APPLE");
+        list.add("banana");
+        List<Integer> ilist=new ArrayList<Integer>();
+
+        List<Dog>dlist=new ArrayList<Dog>() ;
+        dlist.add(new Dog());
+        dlist.add(new Dog());
+        dlist.add(new Dog());
+
+        //List<Object>olist=new ArrayList<Object>();
+        //olist.add(new Dog());
+    }
+}
+```
+
+```java
+public class Cat {
+    public void catchMouse(){
+        System.out.println("Cat can catch mouse......");
+    }
+}
+
+```
+
+```java
+public class Dog {
+    public void watchingDoor(){
+        System.out.println("Dogs can watch doors.....");
+    }
+}
+```
+
+```java
+public class GenericMethodDemo {
+    public static <T>void print(T[] arrs) {
+        for (T item:arrs){
+            System.out.println(item);
+        }
+
+    }
+}
+public class GenericMethodTest {
+    public static void main(String[] args) {
+        Integer[] arrs = {1, 2, 3, 4, 5, 6, 7};
+        String[] str = {"apple", "banana"};
+        Dog[] dogs=new Dog[3];
+        dogs[0]=new Dog();
+        dogs[1]=new Dog();
+        dogs[2]=new Dog();
+        //GenericMethodDemo.<Integer>print(arrs);
+        //GenericMethodDemo.<String>print(str);
+        GenericMethodDemo.print(arrs);
+        GenericMethodDemo.<String>print(str);
+        GenericMethodDemo.print(dogs);
+
+
+    }
+}
+
+public class GenericTest {
+    public static void main(String[] args) {
+        Object[] animal=new Object[5];
+        animal[0]=new Dog();//上转型
+        animal[1]=new Cat();
+        animal[2]=new Dog();
+        animal[3]=new Cat();
+        animal[4]=new Dog();
+
+        for(int i=0;i<animal.length;i++){
+            System.out.println(animal[i]);
+        }
+        /*Dog dog= (Dog) animal[1];//不使用泛型，运行时会报错
+        dog.watchingDoor();*/
+
+    }
+
+}
+
+public class MyGeneric<T>{
+    private T x;
+
+    public T getX() {
+        return x;
+    }
+
+    public void setX(T x) {
+        this.x = x;
+    }
+    public MyGeneric(){
+        super();
+    }
+    public MyGeneric(T x){
+        super();
+        this.x=x;
+    }
+}
+```
+
+#### GUI
+
+```java
+public class MyFrame extends JFrame {
+    private JLabel userInfo,passInfo;
+    private JButton login,cancel;
+    private JTextField username;
+    private JPasswordField password;
+
+    public MyFrame(){
+        userInfo=new JLabel("用户名：");
+        passInfo=new JLabel("密  码：");
+        login=new JButton("登录");
+        cancel=new JButton("取消");
+        username=new JTextField(20);
+        password=new JPasswordField(20);
+
+        login.addActionListener(new MyAction());
+        cancel.addActionListener(new MyAction());
+
+        this.setLayout(new FlowLayout());
+        this.add(userInfo);
+        this.add(username);
+        this.add(passInfo);
+        this.add(password);
+        this.add(login);
+        this.add(cancel);
+
+        this.setTitle("用户登录");
+        this.setBounds(100,100,300,300);
+        setResizable(false);
+        this.setVisible(true);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
+
+    class MyAction implements ActionListener{
+        public void actionPerformed(ActionEvent argo){
+            System.out.println("Merry Cristmas");
+            String user=username.getText();
+            String pass=password.getText();
+
+            JButton btn=(JButton) e.getSource();
+            if(btn==login)
+            System.out.println("username:"+user+"password:"+pass);
+            if(btn==cancel){
+                username.setText("");
+                password.setText("");
+
+            }
+        }
+    }
+}
+public class GUITest {
+    public static void main(String[] args) {
+        JFrame win =new JFrame("My GUI");
+        win.setBounds(100,100,400,400);
+        win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//点击关闭按钮时，页面退出
+
+        JButton ok=new JButton("OK");
+        JButton cannel=new JButton("Cannel");
+        /*法一：win.add("West",ok);
+        win.add("South",cannel);*/
+
+       /*法二 win.setLayout(new FlowLayout());
+        win.add(ok);
+        win.add(cannel);*/
+        win.setVisible(true);
+    }
+}
+```
+

@@ -1,0 +1,189 @@
+
+### 中介委托方法显示得分
+* Aclass类中的委托方法HuiTuoMethod（）进行得分统计和显示，将此方法可作为参数传递到需要的地方
+* Bclass类中进行委托声明，将委托变成类：public delegate void HuiTuoDelegate();
+* 并在Bclass类定义变量：pubic HuiTuoDelegate m_Del;
+* Aclass类中还需添加消息注册，使Bclass可以使用该消息统计加分：Bclass f;f.m_Del += HuiTuoMethod；或在Bclass类中添加消息注册，有：Aclass g;m_Del += g.HuiTuoMethod；
+* 在Bclass中需要委托做事的地方调用：If(m_Del !=null) m_Del();
+
+```
+public class BulletScript : MonoBehaviour {
+
+	// Use this for initialization
+	[SerializeField] private float m_Speed = 1f;
+	Rigidbody2D m_Rigid;
+	void Awake () {
+		m_Rigid = GetComponent<Rigidbody2D> ();
+		
+	}
+	
+	// Update is called once per frame
+	void Start () {
+		m_Rigid.AddForce (transform.up * m_Speed);
+		Destroy (gameObject, 2f);
+		
+	}
+	void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collision.gameObject.tag == "Fish") {
+			Destroy (gameObject);
+			collision.gameObject.GetComponent<FishScript> ().TakeDamaged (50f);
+		}
+	}
+}
+```
+
+```
+public class CannonScript : MonoBehaviour {
+
+	// Use this for initialization
+	Transform m_Gun;
+	[SerializeField] private Transform m_FirePos;
+	//public GameObject firePrefab;
+	void Start () {
+		m_Gun = transform.Find("Gun");
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		//get the mouse position on the Screen to 3D position
+		Vector3 mousePos = Camera.main.ScreenToWorldPoint (Input.mousePosition);
+		//Calculate the vector3 and the angle between y axis and this vector3
+		Vector3 TargetDir = mousePos - m_Gun.position;
+		float angle = Vector2.Angle (Vector3.up, TargetDir);
+		//change the Gun shoot direction
+		m_Gun.eulerAngles = Vector3.forward * angle;
+		m_Gun.eulerAngles = Vector3.forward * Mathf.Clamp (angle, 0, 100f);
+		if (mousePos.x > 0) {
+			m_Gun.eulerAngles = -Vector3.forward * angle;
+			m_Gun.eulerAngles = Vector3.forward * Mathf.Clamp (-angle, -100f, 0f);
+		}
+
+		if(Input.GetMouseButtonDown(0)|| Input.GetKeyDown(KeyCode.Space))
+		{
+			GameObject firePrefab = Resources.Load<GameObject> ("Prefabs/Fire");
+			Instantiate (firePrefab, m_FirePos.position, m_FirePos.rotation);
+
+		}
+		if (Input.GetKey (KeyCode.Escape))
+			Application.Quit ();
+	}
+}
+```
+
+```
+public class FishPool : MonoBehaviour {
+
+	// Use this for initialization
+	private int m_RandomType;
+	private Vector3 m_RandomPos;
+	FishScript.FishDir m_RandomDir;
+	private float m_Time = 0;
+	private float m_TimeCD = 1f;
+
+	uint m_CurrentFishCount =0;
+	uint m_MaxFishCount = 25;
+	public GameObject ranPre;
+	[SerializeField] private Text m_ScoreTxt;
+	public Text m_ScoreTxt;
+	void Start () {
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		if (m_CurrentFishCount > m_MaxFishCount)
+			return;
+		m_Time += Time.deltaTime;
+		if(m_Time>=m_TimeCD)
+		{
+			//generate a fish at randompostition
+			m_RandomType = Random.Range(1,8);
+			GameObject ranPre = Resources.Load<GameObject> ("Prefabs/Fish" + m_RandomType);
+			m_RandomPos = new Vector3 (Random.Range (-9f, 9f), Random.Range (-4f, 6f), 0);
+			m_RandomDir = Random.value > 0.5f ? FishScript.FishDir.Right : FishScript.FishDir.Left;
+			FishScript f = FishScript.SpawnOneFish (m_RandomPos, ranPre, m_RandomDir);
+			f.m_Del += YuJian;//add method YuJian on the delegate ，Event registration
+			m_CurrentFishCount++;
+		}
+		
+	}
+	//delegate event
+	private uint m_Score=0;
+	private void YuJian()
+	{
+		m_CurrentFishCount--;
+		m_Score += 5;
+		m_ScoreTxt.text = "Score:<color=yellow><b> "+ m_Score  +" </b></color>";
+	}
+}
+```
+
+```
+public class FishScript : MonoBehaviour {
+
+	// Use this for initialization
+	//public GameObject expre;
+	public enum FishDir
+	{
+		Right,
+		Left
+	}
+	private static FishDir m_Dir;
+	private float m_FishHP = 200f;
+	Vector3 m_RandomTarget;
+	void Start () {
+		transform.localScale = m_Dir == FishDir.Left ? new Vector3 (-1, 1, 1) : new Vector3 (1, 1, 1);
+		m_Dir = m_Dir;
+		SetPosByDir ();
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		FishMoving ();
+	}
+	private void SetPosByDir()
+	{
+		m_RandomTarget = m_Dir == FishDir.Left ? new Vector3 (-9f, Random.Range (-4, 6f), 0) : new Vector3 (9f, Random.Range (-4, 6f), 0);
+	}
+	void FishMoving()
+	{
+		transform.position = Vector3.MoveTowards (transform.position, m_RandomTarget, 2 * Time.deltaTime);
+		if (Vector3.Distance (transform.position, m_RandomTarget) < 0.9f) {
+			m_Dir = m_Dir == FishDir.Left ? FishDir.Right : FishDir.Left;
+			transform.localScale = m_Dir == FishDir.Left ? new Vector3 (-1, 1, 1) : new Vector3 (1, 1, 1);
+			SetPosByDir ();
+
+		}
+	}
+
+	public static FishScript SpawnOneFish(Vector3 pos, GameObject pre,FishDir dir)
+	{
+		GameObject oneFish = Instantiate (pre, pos, Quaternion.identity);
+		m_Dir = dir;
+		return oneFish.GetComponent<FishScript> ();
+	}
+
+	//delegate here:
+
+//	public delegate void FishDeathDelegate();//declare
+
+//	public FishDeathDelegate m_Del;//Instantiate
+	public void TakeDamaged(float damage)
+	{
+		m_FishHP -= damage;
+		if (m_FishHP <= 0) {
+			Destroy (gameObject);
+			GameObject expre = Resources.Load<GameObject> ("Prefabs/Explorsion");
+			GameObject ex = Instantiate (expre, transform.position, Quaternion.identity);
+			Destroy (ex, 1.2f);
+
+	//		if(m_Del!=null)
+	//			m_Del();//decreasing one fish
+
+		}
+	}
+}
+```
