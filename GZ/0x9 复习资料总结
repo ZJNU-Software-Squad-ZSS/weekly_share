@@ -1,0 +1,86 @@
+# unity复习资料
+### 1.触发信息检测：
+1.MonoBehaviour.OnTriggerEnter( Collider other )当进入触发器
+2.MonoBehaviour.OnTriggerExit( Collider other )当退出触发器
+3.MonoBehaviour.OnTriggerStay( Collider other )当逗留触发器
+### 碰撞信息检测：
+1.MonoBehaviour.OnCollisionEnter( Collision collisionInfo ) 当进入碰撞器
+
+2.MonoBehaviour.OnCollisionExit( Collision collisionInfo ) 当退出碰撞器
+
+3.MonoBehaviour.OnCollisionStay( Collision collisionInfo )  当逗留碰撞器
+### 2.初始化
+```
+
+1.void Awake (){  
+2.}       
+3.//初始化函数，在游戏开始时系统自动调用。一般用来创建变量之类的东西。  
+4.  
+5.void Start(){  
+6.}  
+7.//初始化函数，在所有Awake函数运行完之后（一般是这样，但不一定），在所有Update函数前系统自动条用。一般用来给变量赋值。  
+```
+### 3.更新的三种情况FixedUpdate 、Update、LateUpdate比较
+void FixedUpdate () 固定更新
+
+void Update ()        更新
+
+void LateUpdate()  晚于更新
+
+ 
+FixedUpdate () 和 Update ()  
+   
+同：当MonoBehaviour启用时，其在每一帧被调用。都是用来更新的
+
+异：Update()每一帧的时间不固定，即第一帧与第二帧的时间t1和第三帧与第四帧的时间t2不一定相同。FixedUpdate()每帧与每帧之间相差的时间是固定的.
+
+Update受当前渲染的物体影响，这与当前场景中正在被渲染的物体有关（比如人物的面数，个数等），有时快有时慢，帧率会变化，Update被调用的时间间隔就会发生变化。但是FixedUpdate则不受帧率的变化影响，它是以固定的时间间隔来被调用。
+
+所以一些物理属性的更新操作应该放在FxiedUpdate中操作，比如Force，Collider，Rigidbody等。外设的操作也是，比如说键盘或者鼠标的输入输出Input，因为这样GameObject的物理表现的更平滑，更接近现实。
+
+FixedUpdate的时间间隔可以在项目设置中更改，Edit->Project Setting->time 找到Fixed timestep。就可以修改了
+
+Update和LateUpdate
+
+LateUpdate是在所有Update函数调用后被调用。可用于调整脚本执行顺序。例如:当物体在Update里移动时，跟随物体的相机可以在LateUpdate里实现。
+
+ Unity后台主线程将 Update LateUpdate  制作成两个多线程 先去执行Update的线程，等Update 执行完毕后 在去执行LateUpdate线程。
+
+举个例子，一个宿舍4个人，每个人的起床在update中执行，出发在某个人中的lateupdate执行，这样就可以保证每个人都起床了才会出发。
+
+因为多个update函数是先后顺序是随机的，所以可能摄像机先update而物体还未移动，而下一帧是若物体先update那么就会出现瞬移的情况。多数摄像机都要加上LateUpdate，即所有场景内的调用结束后再更新摄像机。
+
+比如说：有2个不同的脚本同时在Update中控制一个物体，那么当其中一个脚本改变物体方位、旋转或者其他参数时，另一个脚本也在改变这些东西，那么这个物体的方位、旋转就会出现一定的反复。如果还有个物体在Update中跟随这个物体移动、旋转的话，那跟随的物体就会出现抖动。 如果是在LateUpdate中跟随的话就会只跟随所有Update执行完后的最后位置、旋转，这样就防止了抖动。
+### 4.鼠标事件分析（GetMouseButton）
+当鼠标按键按下时，返回一次true，后面参数0是左键，1是右键，2是中键	
+```
+		if(Input.GetMouseButtonDown(0))
+			Debug.Log("Pressed left click.");
+		if(Input.GetMouseButtonDown(1))
+			Debug.Log("Pressed right click.");
+		if(Input.GetMouseButtonDown(2))
+			Debug.Log("Pressed middle click.");
+
+```
+当鼠标按键按下时，返回true，可能多次，根据你鼠标按下的时间	，后面参数0是左键，1是右键，2是中键
+```
+        if(Input.GetMouseButton(0))
+			Debug.Log("Pressed left click.");
+		if(Input.GetMouseButton(1))
+			Debug.Log("Pressed right click.");
+		if(Input.GetMouseButton(2))
+			Debug.Log("Pressed middle click.");
+```
+当鼠标按键按下后弹起时，返回一次true，后面参数0是左键，1是右键，2是中键
+```
+if(Input.GetMouseButtonUp(0))
+        Debug.Log("Pressed left click.");
+if(Input.GetMouseButtonUp(1))
+		Debug.Log("Pressed right click.");
+if(Input.GetMouseButtonUp(2))
+		Debug.Log("Pressed middle click.");
+```
+### 键盘输入事件
+GetKey 当通过名称指定的按键被用户按住时返回true 
+GetKeyDown 当用户按下指定名称的按键时的那一帧返回true。 
+GetKeyUp 在用户释放给定名字的按键的那一帧返回true。
