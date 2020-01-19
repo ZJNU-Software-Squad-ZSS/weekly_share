@@ -1,0 +1,49 @@
+#Flutter Widget简介
+##概念
+在Flutter中几乎所有的对象都是一个Widget。与原生开发中“控件”不同的是，Flutter中的Widget的概念更广泛，它不仅可以表示UI元素，也可以表示一些功能性的组件如：用于手势检测的 GestureDetector widget、用于APP主题数据传递的Theme等等，而原生开发中的控件通常只是指UI元素。在后面的内容中，我们在描述UI元素时可能会用到“控件”、“组件”这样的概念，我们心里需要知道他们就是widget，只是在不同场景的不同表述而已。由于Flutter主要就是用于构建用户界面的，所以，在大多数时候，可以认为widget就是一个控件，不必纠结于概念。
+
+##Widget与Element
+在Flutter中，Widget的功能是“描述一个UI元素的配置数据”，它就是说，Widget其实并不是表示最终绘制在设备屏幕上的显示元素，而它只是描述显示元素的一个配置数据。
+
+实际上，Flutter中真正代表屏幕上显示元素的类是Element，也就是说Widget只是描述Element的配置数据！有关Element的详细介绍我们将在本书后面的高级部分深入介绍，现在，我们只需要知道：Widget只是UI元素的一个配置数据，并且一个Widget可以对应多个Element。这是因为同一个Widget对象可以被添加到UI树的不同部分，而真正渲染时，UI树的每一个Element节点都会对应一个Widget对象。总结一下：  
+
++ Widget实际上就是Element的配置数据，Widget树实际上是一个配置树，而真正的UI渲染树是由Element构成；不过，由于Element是通过Widget生成的，所以它们之间有对应关系，在大多数场景，我们可以宽泛地认为Widget树就是指UI控件树或UI渲染树。
++ 一个Widget对象可以对应多个Element对象。这很好理解，根据同一份配置（Widget），可以创建多个实例（Element）。
+
+##Widget主要接口
+Widget类的声明：  
+
+```
+
+@immutable  
+abstract class Widget extends  DiagnosticableTree{  
+
+	const Widget({ this.key });  
+    final Key key;  
+
+	@protected
+    Element createElement();
+
+    @override
+    String toStringShort() {
+      return key == null ? '$runtimeType' : '$runtimeType-$key';
+    }
+
+    @override
+    void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+      super.debugFillProperties(properties);
+      properties.defaultDiagnosticsTreeStyle = DiagnosticsTreeStyle.dense;
+    }
+
+    static bool canUpdate(Widget oldWidget, Widget newWidget) {
+      return oldWidget.runtimeType == newWidget.runtimeType
+        && oldWidget.key == newWidget.key;
+    }
+```
+
++ Widget类继承自DiagnosticableTree，DiagnosticableTree即“诊断树”，主要作用是提供调试信息。
++ Key: 这个key属性类似于React/Vue中的key，主要的作用是决定是否在下一次build时复用旧的widget，决定的条件在canUpdate()方法中
++ createElement()：正如前文所述“一个Widget可以对应多个Element”；Flutter Framework在构建UI树时，会先调用此方法生成对应节点的Element对象。此方法是Flutter Framework隐式调用的，在我们开发过程中基本不会调用到。
++ debugFillProperties(...) 复写父类的方法，主要是设置诊断树的一些特性。
++ canUpdate(...)是一个静态方法，它主要用于在Widget树重新build时复用旧的widget，其实具体来说，应该是：是否用新的Widget对象去更新旧UI树上所对应的Element对象的配置；通过其源码我们可以看到，只要newWidget与oldWidget的runtimeType和key同时相等时就会用newWidget去更新Element对象的配置，否则就会创建新的Element。
+
