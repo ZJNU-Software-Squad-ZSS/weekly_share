@@ -1,0 +1,243 @@
+#### 十
+
+```java
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+
+public class MyWorld extends World
+{
+    private ArrayList<Block> blocks = new ArrayList<Block>();//方块列表
+    public MyWorld()
+    {    
+        super(17, 20, 25);//建立15*15的方块阵列，每个方块尺寸为25*25像素
+        //block初始化
+        for(int i=0;i<15;i++)//列
+        {
+            for(int j=0;j<15;j++)//行
+            {
+                Block block = new Block();//创建方块对象
+                blocks.add(block);//加入方块列表
+                addObject(block,i+1,j+4);//添加到游戏场景
+            }
+        }
+        //埋炸弹
+        Collections.shuffle(blocks);//随机打乱block的顺序
+        for(int i=0;i<20;i++)
+        {
+            blocks.get(i).setBomb;//在前20个方块中设置地雷
+        }
+        Timer timer = new Timer();//创建时间对象
+        addObject(timer, 3, 2);//添加到游戏场景
+    }
+    //显示所有地雷
+    public void showAllBomb()
+    {
+        for(int i=0;i<20;i++)
+        {
+            blocks.get(i).setImage("Bomb.png");//将图像设置为地雷
+        }
+    }
+    //更新游戏逻辑，游戏每帧执行一次
+    public void act()
+    {
+        for(int i=0;i<20;i++)//对于20个地雷
+        {
+            if(!blocks.get(i).getFlag())//如果没有插上旗子则
+            return;//返回
+        }
+        addObject(new Win(), 12, 2);//出现笑脸
+        Greenfoot.playSound("win.wav");//播放获胜声音
+        Greenfoot.stop();//游戏结束了
+    }
+   
+}
+       
+```
+
+
+
+```java
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.*;
+
+
+public class Block extends Actor
+{
+    private boolean isBomb=false;//标记是否有地雷
+    private boolean isFlagged=false;//标记是否插旗子
+    private boolean isOpen=false;//标记是否被翻开
+    public boolean getFlag()
+    {
+        return isFlagged;//获取旗子标记
+    }
+    public void setBomb()//设置地雷
+    {
+        isBomb=true;
+    }
+    public boolean getBomb()//获取地雷标记
+    {
+        return isBomb;
+    }
+    public void act() //更新方块对象的游戏逻辑，游戏每帧执行一次
+    {
+        checkMouse();
+    }
+    //处理鼠标单击事件
+    public void checkMouse()
+    {
+        if(Greenfoot.mouseClicked(this))//如果有单击事件
+        {
+            MouseInfo mouse = Greenfoot.getMouseInfo();//创建鼠标对象，获取鼠标事件
+            if(mouse.getButton() == 3 && !isOpen)//getButton（）方法获取按键信息：返回值为3为鼠标右键；返回值为1为鼠标左键
+            {
+                if(!isFlagged)//如果没有插上旗子
+                {
+                    setImage("BlockFlagged.png");//设置旗子图片
+                    isFlagged=true;//标记置为true
+                }
+                else//如果已经插上旗子了
+                {
+                    setImage("Block.png");//重新设置方块图片
+                    isFlagged=false;//旗子的标记置为false
+                }
+            }
+            if(mouse.getButton() == 1 && !isFlagged)//鼠标左键单击方块并且方块上没有插旗子
+            {
+                if(isBomb)//如果是地雷
+                {
+                    MyWorld world = (MyWorld) getWorld();//获取游戏场景对象
+                    world.showAllBomb();//显示所有地雷
+                    Greenfoot.playSound("bomb.wav");//播放炸弹声音
+                    Greenfoot.stop();//结束游戏
+                }
+                else
+                {
+                    openBlock(this);//打开该方块
+                }
+            }
+        }
+    }
+    //获取方块周围地雷数
+    private int getBombNumber(Block block)
+    {
+        int bombNumber=0;//地雷数
+        List<Block>blocks=block.getNeighbours(1,true,Block.class);//获取与方块相邻的所有方块对象
+        for(Block nBlock:blocks)//检查相邻各个方块下是否有地雷
+        {
+            if(nBlock.getBomb())//如果该方块下有地雷
+            {
+                bombNumber++;//地雷数加1
+            }
+            
+        }
+        return bombNumber;//返回地雷数
+    }
+    //递归打开方块及周围所有方块
+    private void openBlock(Block block)
+    {
+        block.isOpen=true;//标记方块状态为打开
+        int bombNumber=block.getBombNumber(block);
+        block.setImage("BlockClicked["+bombNumber+"].png");//显示方块周围地雷数
+        if(bombNumber==0)//地雷数为零，即周围没有地雷
+        {
+            List<Block>blocks = block.getNeighbours(1,true,Block.class);//获取相邻方块
+            for(Block nBlock:blocks)//逐一打开方块
+            {
+                if(!nBlock.isOpen)//如果某方块没有被打开
+                {
+                    openBlock(nBlock);//打开此方块
+                }
+            }
+        }
+    }          
+}
+```
+
+
+
+```java
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+
+public class SimpleTimer extends Actor
+{
+    private long lastMark = System.currentTimeMillis();//定义标记时间
+    public int minutes = 0;//分
+    public int seconds = 0;//秒
+    public int seconds() 
+    {
+        seconds = millisElapsed()/1000;//经过的时间，以秒为单位
+        return seconds;//返回秒
+    }
+    public int minutes() 
+    {
+        if (seconds() == 60) //如果为60秒
+        {
+            minutes++;//分加1
+            mark();//标记
+        }
+        return minutes;//返回分钟
+    }
+    //标记的时间
+    public void mark()
+    {
+        lastMark = System.currentTimeMillis();
+    }
+    //经过的时间
+    public int millisElapsed()
+    {
+        return (int) (System.currentTimeMillis() - lastMark);//（现在-过去）的时间
+    }    
+}
+
+```
+
+
+
+```java
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+
+public class Timer extends Actor
+{
+    SimpleTimer timer = new SimpleTimer();//创建新SimpleTimer对象
+    int i = 0;
+    public Timer()
+    {
+        update();
+    }
+    public void act() 
+    {
+        while (i == 0) {
+            timer.mark();//标记时间
+            i++;
+        }
+        update();//更新时间
+    }
+    //更新时间并输出
+    public void update()
+    {
+        setImage(new GreenfootImage("  " + Integer.toString(timer.minutes()) + ":" + Integer.toString(timer.seconds()) + "  ", 24, Color.RED, Color.BLACK));
+    }    
+}
+```
+
+
+
+```java
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+
+public class Win extends Actor
+{
+    /**
+     * Act - do whatever the Win wants to do. This method is called whenever
+     * the 'Act' or 'Run' button gets pressed in the environment.
+     */
+    public void act() 
+    {
+        // Add your action code here.
+    }    
+}
+```
+
