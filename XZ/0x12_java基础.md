@@ -153,5 +153,47 @@
      handler for each exception
    }
    ```
+   
+ ## 文件IO
+ + File类
+   - 相对文件名、绝对文件名
+   - new File("C\\book"),new File("C\\book\\hello.txt"),new File("hello.txt")
+   - File.isDirectory(),File.isFile()判断文件是否为目录、文件
+   - 在Java中，目录分隔符使用双斜杠(\\)
+   - **File类不包括*创建文件*的方法，也不包括对文件进行*读取和写*操作**
+   - 通过File.isExist()方法判断new的File对象包含的文件路径（也即文件）是否存在
+ + 文件输入输出
+   - 使用**PrintWriter**类***创建*并写入**数据
+     1.为文本文件创建一个PrintWriter对象PrintWriter writer = new PrintWriter(**new File(pathName)**)
+     2.使用print、printf、println方法向文件写入数据
+     3.使用try-with-resources自动关闭文件
+       try(声明和创建文件){
+       使用资源处理文件
+       }
+       ```
+       	try(
+		PrintWriter writer = new PrintWriter(file);
+	   ) {
+	writer.print("Tepnys is ");
+	writer.println("22");
+	writer.print("Traynor is 23");
+	}
+	```
+   - 使用**Scanner**类**读取**数据
+     1.Scanner scanner = new  Scanner(new File(fileName))
+     2.scanner.hasNext(),scanner.next(),scanner.nextInt(),scanner.close()
+     3.Scanner如何工作
+       用Scanner提供的方法，读取用**分隔符**分隔开的标记，**默认分隔符为*空格***
+ 
+ 
+ ## 抽象类
+ + **构造方法**定义为protected
+ + 不能使用new操作符创建它的实例
+ + **抽象方法**只有定义没有实现，**实现由子类提供**
+ + 一个**包含*抽象方法***的类，必须声明为抽象类
+ 
+ ## 接口
+ + 只包含**常量**和**抽象方法**
+ + 父类是接口，子类如果不是抽象类就必须实现接口定义的方法
  
   
