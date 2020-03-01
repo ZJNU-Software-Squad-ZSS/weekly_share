@@ -103,15 +103,15 @@
    	UserViewModel vmuser = new UserViewModel();
    	vmuser.UserName = user.UserName;
    	if(user.Character=0){
-   		vmuser.Character = "管理员"
+   		vmuser.Character = "管理员";
    		vmuser.CharacterColor="Red";
    	}
    	else{
-   		vmuser.Character = "普通用户"
+   		vmuser.Character = "普通用户";
    		vmuser.CharacterColor= "green";
    	}
      
-   	vmuser.UserName = "Admin"
+   	vmuser.UserName = "Admin";
      
    	return View("MyView", vmEmp);
    }
