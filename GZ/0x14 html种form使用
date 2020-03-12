@@ -1,0 +1,83 @@
+### form的使用
+```
+<html>
+    <head><title>registration</title></head>
+    <body>
+        <h2>New user registration</h2>
+        <h5>This My Calix portal registration form is intended for calix customer and partners only for read only accessto the Calix Community,please click <a href="file:///E:/%E5%A4%A7%E4%B8%89%E4%B8%8B%E5%AD%A6%E6%9C%9F%E8%AF%BE%E7%A8%8B/web%E5%BC%80%E5%8F%91/html/calculator.html?username=201732120117&password=201732120117&c1=course1&radio=student&student_id=201732120117&img_cat.x=0&img_cat.y=0&photo=&major=math&self_des=" target="_blank">here</a></h5>
+        <form name="registration" action="">
+        User type:
+            <input type="radio" name="Type" id="Type" value="Type" checked="checked">Calix customer 
+            <input type="radio" name="Type" id="Type" value="Type">Partner/Affiliate
+            <input type="radio" name="Type" id="Type" value="Type">Prospect/Other
+            <br>
+        First Name:<br><input type="text"size="60"/><br>
+        Last Name:<br><input type="text" size="60"><br>
+        Email:<br><input type="text" size="60"><br>
+        Confirm Email:<br><input type="text"size="60"/><br>
+        Company:<br><input type="text" size="60"><br>
+        Address1:<br><input type="text"size="60"/><br>
+        Address2:<br><input type="text" size="60"><br>
+       
+        <table class="frm-layout" >
+            <tr>
+                <td class="title">City</td>
+                <td class="title">State</td>
+                <td class="title">Zip/Postal Code</td>
+            </tr>
+            <tr>
+                <td ><input type="text" size="40"></td>
+                <td> <select name="State" id="State_sel"style="width: 280">
+                    <option value="zhejiang">zhejiang</option>
+                    <option value="beijing">beijing/option>
+                    <option value="shanghai">shanghai</option>
+                </select></td>
+                <td><input type="text" size="40"></td>
+            </tr>
+            <tr><td colspan="3" align="left">Country</td></tr>
+            <tr><td colspan="3" align="left">
+              <select name="Country" id="Country_sel" style="width: 400">
+            <option value="China">China</option>
+            <option value="USA">USA</option>
+            <option value="UK">UK</option>
+              </select></td>
+            </tr>
+            <tr>
+                <td class="title">Primary Phone</td>
+                <td class="title">Number</td>
+                <td class="title">Ext</td>
+            </tr>
+            <tr>
+                <td> <select name="State" id="State_sel"style="width: 280">
+                    <option value="a">a</option>
+                    <option value="b">b/option>
+                    <option value="c">c</option>
+                </select></td>
+                <td><input type="text" size="40"></td>
+                <td><input type="text" size="40"></td>
+            </tr>
+            <tr>
+                <td class="title">Secondary Phone</td>
+                <td class="title">Number</td>
+                <td class="title">Ext</td>
+            </tr>
+            <tr>
+                <td> <select name="State" id="State_sel"style="width: 280">
+                    <option value="1">1</option>
+                    <option value="2">2option>
+                    <option value="3">3</option>
+                </select></td>
+                <td><input type="text" size="40"></td>
+                <td><input type="text" size="40"></td>
+            </tr> 
+            <tr><td colspan="3" align="left">Enter Text in Box Below</td></tr>
+            <tr><td colspan="3" align="left"><input type="text" size="60"></td></tr>
+        </table>
+        <img src="cat2.jpg" alt="" width="100" height="100"> <br>
+        <font color="red">Required Fields</font><br>
+        <input type="submit" name="submit" id="" value="submit"/>
+    </form>
+
+    </body>
+</html>
+```
