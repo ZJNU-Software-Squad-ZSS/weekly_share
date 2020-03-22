@@ -1,0 +1,117 @@
+## 利用HTML和CSS制作个人简历
+```
+<html>
+    <head>
+        <title>RESUME</title>
+        <style>
+            h1{
+               text-align: center;
+            }
+            img{
+            width: 20%;
+            height: 230px;
+            float: right;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>这里是大标题</h1>
+        <img id="img1"src="cat.jpg" alt="cat">
+        <p>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落这里是段落</p>
+        <hr style="height:1px;border:none;border-top:1px dashed #0066CC;"/>
+        <table border="1" align="center" cellspacing="0" cellpading="0" width="" height="" style="table-layout:fixed;border-color: black;">
+            <tr>
+                <td colspan="8" align="center">基本信息：</td>
+            </tr>
+            <tr>
+                <td width="10%">名字：</td>
+                <td width="10%">高增</td>
+                <td width="10%">性别：</td>
+                <td width="10%">男</td>
+                <td width="10%">家庭地址：</td>
+                <td width="10%">XXXXXXXX</td>
+                <td width="10%">籍贯</td>
+                <td>XXXXXXXX</td>
+            </tr>
+            <tr>
+                <td>出生日期：</td>
+                <td>1998年x月x日</td>
+                <td>名族：</td>
+                <td>汉</td>
+                <td>电话号码：</td>
+                <td>1234567890a</td>
+                <td>身高体重：</td>
+                <td>XXXcm,XXkg</td>
+            </tr>
+            <tr>
+                <td>手机号码：</td>
+                <td>1234567890a</td>
+                <td>邮箱：</td>
+                <td>123456789a@qq.com</td>
+                <td>学历：</td>
+                <td>本科生</td>
+                <td>其他：</td>
+                <td>无</td>
+            </tr>
+        </table>
+        <hr style="border: 3px solid skyblue;/">
+        <h3>个人经历：（请如实填写下表）</h3>
+        <hr style=" height:5px;border:none;border-top:5px ridge green;"/>
+        <table border="1" align="center" cellspacing="0" cellpading="0" width="100%" height="400px" style="table-layout:fixed;border-color: black;text-align: center;">
+        <tr height="30px" style="vertical-align:top">
+            <td width="15%">起始时间：</td> <td width="15%">截至时间：</td> <td width="20%">工作地点：</td> <td width="25%">曾获得的荣誉：</td> <td width="25%">曾受处罚：</td>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>a</td>
+            <td>幼儿园</td>
+            <td>荣誉1</td>
+            <td>处罚a</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>b</td>
+            <td>小学</td>
+            <td>荣誉2</td>
+            <td>处罚b</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>c</td>
+            <td>初中</td>
+            <td>荣誉3</td>
+            <td>处罚c</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>d</td>
+            <td>高中</td>
+            <td>荣誉4</td>
+            <td>处罚d</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>e</td>
+            <td>大学</td>
+            <td>荣誉5</td>
+            <td>处罚e</td>
+        </tr>
+        <tr>
+            <td>6</td>
+            <td>f</td>
+            <td>其他</td>
+            <td>荣誉7</td>
+            <td>处罚f</td>
+        </tr>
+        
+        </table>
+        <hr style=" height:10px;border:none;border-top:10px groove skyblue;"/>
+        <h3>自己的长处和对工作的期望：</h3>
+        <table border="1" align="center" cellspacing="0" cellpading="0" width="100%" height="200px" style="table-layout:fixed;border-color: black;text-align: center;">
+            <tr>
+                <td valign="top">这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文这里是正文</td>
+            </tr>
+        </table>
+    </body>
+</html>
+```
