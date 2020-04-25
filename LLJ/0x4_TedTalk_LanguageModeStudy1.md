@@ -21,7 +21,7 @@ They spend an average of nine minutes a day on each of these. These apps make th
 **[What’s the difference between temptations from screen and from life. Why we have an abnormal rising trend of using screens, why it is a time thief]**
 
 The news feed just rolls on, and everything's bottomless: Twitter, Facebook, Instagram, email, text messaging, the news. And when you do check all sorts of other sources, you can just keep going on and on and on. So we can get a cue about what to do from Western Europe, where they seem to have a number of pretty good ideas in the workplace. Here's one example. This is a Dutch design firm. And what they've done is rigged the desks to the ceiling. And at 6pm every day, it doesn't matter who you're emailing or what you're doing, the desks rise to the ceiling. 
-**[a add-on to the last paragraph]**
+**[an add-on to the last paragraph]**
 
 Four days a week, the space turns into a yoga studio, one day a week, into a dance club. It's really up to you which ones you stick around for. But this is a great stopping rule, because it means at the end of the day, everything stops, there's no way to work. At Daimler, the German car company, they've got another great strategy. When you go on vacation, instead of saying, "This person's on vacation, they'll get back to you eventually," they say, "This person's on vacation, so we've deleted your email. This person will never see the email you just sent." 
 **[What is supposed to be a stopping cue for screen use, and what has been done to deal with it]**
