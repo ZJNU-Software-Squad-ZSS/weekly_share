@@ -1,0 +1,94 @@
+#### 什么是 CSS?
+* CSS 指层叠样式表 (Cascading Style Sheets)
+* 样式定义如何显示 HTML 元素
+* 样式通常存储在样式表中
+* 把样式添加到 HTML 4.0 中，是为了解决内容与表现分离的问题
+* 外部样式表可以极大提高工作效率
+* 外部样式表通常存储在 CSS 文件中
+* 多个样式定义可层叠为一
+* 样式对网页中元素位置的排版进行像素级精确控制
+简单的说css是HTML的衣服
+
+#### CSS样式及顺序
+1.浏览器缺省设置
+2.外部样式表
+3.内部样式表（位于 <head> 标签内部）
+4.内联样式（在 HTML 元素内部）
+其中优先调用的顺序为4-3-2-1,就是在同一种类型的格式在这里面都有的时候，优先执行4，然后到3，到2。
+#### 外部样式表
+当样式需要应用于很多页面时，外部样式表将是理想的选择。在使用外部样式表的情况下，你可以通过改变一个文件来改变整个站点的外观。每个页面使用 标签链接到样式表。 标签在（文档的）头部
+```
+<head> <link rel="stylesheet" type="text/css" href="mystyle.css"> </head>
+```
+浏览器会从文件 mystyle.css 中读到样式声明，并根据它来格式文档。
+外部样式表可以在任何文本编辑器中进行编辑。文件不能包含任何的html 标签。样式表应该以 .css 扩展名进行保存。
+#### 内部样式表
+当单个文档需要特殊的样式时，就应该使用内部样式表。你可以使用 "style" 标签在文档头部定义内部样式表，就像这样:
+```
+<head>
+<style>
+hr {color:sienna;}
+p {margin-left:20px;}
+body {background-image:url("images/back40.gif");}
+</style>
+</head>
+```
+#### 内联样式
+由于要将表现和内容混杂在一起，内联样式会损失掉样式表的许多优势。请慎用这种方法，例如当样式仅需要在一个元素上应用一次时。
+要使用内联样式，你需要在相关的标签内使用样式（style）属性。Style 属性可以包含任何 CSS 属性。本例展示如何改变段落的颜色和左外边距：
+```
+<p style="color:sienna;margin-left:20px">this is a paragraphy.</p>
+```
+
+#### css的id选择器
+##### id 选择器
+* id 选择器可以为标有特定 id 的 HTML 元素指定特定的样式。
+* HTML元素以id属性来设置id选择器,CSS 中 id 选择器以 "#" 来定义。
+* 以下的样式规则应用于元素属性 id="para1":
+例：
+```
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"> 
+<title>W3Cschool教程(w3cschool.cn)</title> 
+<style>
+#para1
+{
+	text-align:center;
+	color:red;
+} 
+</style>
+</head>
+
+<body>
+<p id="para1">Hello World!!!</p>
+<p>This paragraph is not affected by the style.</p>
+</body>
+</html>
+```
+##### class 选择器
+class 选择器用于描述一组元素的样式，class 选择器有别于id选择器，class可以在多个元素中使用。
+class 选择器在HTML中以class属性表示, 在 CSS 中，类选择器以一个点"."号显示：
+例如：
+```
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"> 
+<title>W3Cschool教程(w3cschool.cn)</title> 
+<style>
+.center
+{
+	text-align:center;
+}
+</style>
+</head>
+
+<body>
+<h1 class="center">标题居中</h1>
+<p class="center">段落居中。</p> 
+</body>
+</html>
+```
+
