@@ -1,0 +1,198 @@
+#### homepage
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>homepage</title>
+    <style type="text/css">
+     .toolbar {
+	  text-align: center;
+     }
+     .center
+     {
+      text-align: center;
+     }
+     h2{white-space: pre;}
+    .btn {
+	padding: 1rem 2rem;
+	background-color: rgba(255,255,255,0.2);;
+	color: #fff;
+	border: 0;
+    white-space: pre;
+    cursor:pointer;
+	transition: all 200ms ease;
+	background-color: #10d398;
+    border-radius: 50%;
+    }
+    </style>
+</head>
+<body>
+<div class="center">
+    <h2>Find out which Cambridge English exam may be best
+          for you.Take our quick,free online test.</h2>
+</div>
+<div class="toolbar">
+    <button class="btn" onclick="location.href='registration.html'">Genral
+English</button>
+    <button class="btn" style="background-color: bisque;">For
+School</button>
+    <button class="btn" style="background-color: blueviolet;">Business
+English</button>
+    <button class="btn" style="background-color: rgb(216, 82, 65);">Young
+Learner</button>
+</div>
+</body>
+</html>
+```
+#### registration
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>registration</title>
+    <style type="text/css">
+    .btn-green {
+
+	border: 0;
+    background-color: #003494;
+    }
+    </style>
+</head>
+<body>
+<h2> English Online Test Free Registration</h2>
+<p> in order to access our free online English tests, we'll need to grab just a couple of details from you.Don't worry,it is never shared and you'll never be spammed.</p>
+<hr>
+<form action="test.html">
+<p>First Name</p>
+<input type="text" name="fname">
+<p>Last Name</p>
+<input type="text" name="lname">
+<p>Email Address</p>
+<input type="text" name="address"><br>
+<br>
+<input class="btn-green" type="submit" onclick="return email(this.form.fname,this.form.lname,this.form.address)"  value="Register">
+</form>
+</body>
+<script type="text/javascript">
+    function email(fn,ln,m){
+    var re = /^[\w\-\.]+@[a-z0-9]+(\-[a-z0-9]+)?(\.[a-z0-9]+(\-[a-z0-9]+)?)*\.[a-z]{2,4}$/i;
+    var check=re.test(m.value);
+    var x=0;
+    if(check==false){ 
+    alert("Your Email is a wrong Email !");
+    x=1;
+    }
+
+    var cot1=fn.value.length+ln.value.length;
+    var y=0;
+    var xy=0;
+    if(cot1<6||cot1>10){
+    alert("please make sure the username length is 6~10");
+    y=1;
+    }
+    xy=x+y;
+    if(xy==0){
+     return true
+    }else{ return false}
+    }
+
+
+</script>
+</html>
+```
+#### test
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <style>
+        li {list-style-type:none;}
+
+        p {font-size:30px;}
+
+        hr {
+	    height: 1px;
+	    background-color: #1fb900;
+	    }
+
+        span {font-size:17px;}
+
+        .btn {
+	    border: 0;
+	    font-size:18px;
+	    padding: 1rem 1rem;
+        background-color: #3bb900;
+        }
+    </style>
+</head>
+<body>
+<h1>Test your English</h1>
+<p>For the questions below,please choose the best option to complete the sentence or conversation.</p>
+<hr style=" height:10px;border:none;border-top:3px groove rgb(58, 8, 151);"/>
+<form >
+
+    <ul>
+
+        <p>1 Can I park here?<p>
+        <li>
+            <input type="radio" name="q1" value="A" />
+            <span>Sorry,I did that.</span></li>
+        <li>
+            <input type="radio" name="q1" value="B" />
+            <span>It's the same place.</span></li>
+        <li>
+            <input type="radio" name="q1" value="C" />
+            <span>Only for half an hour.</span></li>
+    </ul>
+    <ul>
+        <p>2 What colour will you paint the children's bedroom?<p>
+        <li>
+            <input type="radio" name="q2" value="1" />
+            <span>I hope it was right.</span></li>
+        <li>
+            <input type="radio" name="q2" value="2" />
+            <span>We can't decide.</span></li>
+        <li>
+            <input type="radio" name="q2" value="3" />
+            <span>It wasn't very difficult.</span></li>
+    </ul>
+
+    <br>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input type="submit" class="btn" onclick="return sub(this.form.q1,this.form.q2)" value="get result">
+
+
+ </form>
+</body>
+<script type="text/javascript">
+    function sub(q1,q2){
+    var x=0;
+    var y=0;
+    for(var i=0;i<q1.length;i++)
+	{
+		if(q1[i].checked){
+        x=1;
+		break;
+		}
+	}
+	for(var i=0;i<q2.length;i++)
+	{
+		if(q2[i].checked){
+        y=1;
+		break;
+		}
+	}
+	if(x!=1||y!=1){
+	alert('please finish all the questions.');
+	return false
+	}else{return true}
+
+    }
+
+
+</script>
+</html>
+```
